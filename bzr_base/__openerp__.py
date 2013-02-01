@@ -7,7 +7,6 @@
     """,
     'author': 'bzrerp team',
     'depends': ['base'],
-    'website': 'https://launchpad.net/bzrerp',
     'data': [],
     'installable': True,
     'auto_install': True,
