@@ -10,7 +10,7 @@ class fi_doc_line_cost(osv.osv):
     _description = "会计凭证"
     _columns = {
 #凭证日期
-        'date':
+        'date':fields.date('凭证日期'),
 #会计期间
         'period_id':fields.many2one('fi.period','期间',required=True,
         states={'posted':[('readonly',True)]},help='过账后不可修改'),        
@@ -20,8 +20,8 @@ class fi_doc_line_cost(osv.osv):
 #凭证号
         'number':fields.char('凭证编号',size=64,
         help='由系统自动生成，结帐前可重排'),
-#附件张数
-        'ref_count':fields.integer('附件张数',help='凭证后附原始凭证的页数'),
+#附单据数
+        'ref_count':fields.integer('附单据数',help='凭证后附原始凭证的页数'),
 #凭证行
         'line_ids':fields.one2many('fi.doc.line','doc_id','凭证行',
         states={'posted':[('readonly',True)]},help='过账后不可修改'),
@@ -67,19 +67,25 @@ class fi_doc_line(osv.osv):
 
 class fi_doc_line_cost(osv.osv):
     _name = 'fi.doc.line.cost'
-    _description = "辅助核算行"
+    _description = '辅助核算行'
     _columns = {
 #凭证行编号
         'line_id':fields.many2one('fi.doc.line','凭证行'),
+#类别
+        'type':fields.char('辅助核算类别',size=64),
 #辅助核算项目
         'co_obj':fields.reference('辅助核算项目'),
 #金额
-        'amount':
+        'amount':fields.float('金额',
+        digits_compute=dp.get_precision('Account')),
 #产品相关
 #数量
-        ''
-#单位
-        ''
+        'quantity':fields.float('数量',
+        digits_compute=dp.get_precision('Account')),
+#单价
+        'price':fields.float('单价',
+        digits_compute=dp.get_precision('Account'))
 #业务伙伴相关
-#到期日            
+#到期日
+        'due':fields.date('到期日',help='往来欠款到期日，用于计算账龄'),
     }
