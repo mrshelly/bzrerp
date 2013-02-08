@@ -5,12 +5,12 @@
     'version': '1.0',
     'category': 'Accounting & Finance',
     'description': """
-
+    总账模块包含凭证、账簿、报表、月结等基本功能
 """,
     'author': 'bzrerp team',
     'sequence': 1,
     'depends': [
-        'base',
+        'bzr_base','decimal_precision',
     ],
     'data': [
     ],

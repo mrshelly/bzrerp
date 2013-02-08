@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <!-- ×´Ì¬ -->
+        <record id="view_bzr_state_tree" model="ir.ui.view">
+            <field name="name">bzr.state.tree</field>
+            <field name="model">bzr.state</field>
+            <field name="arch" type="xml"></field>
+                <tree string="×´Ì¬">
+                    <field name="object"/>
+                    <field name="seq"/>
+                    <field name="key"/>
+                    <field name="name"/>
+                </form>
+        </record>
+        <record id="view_bzr_state_search" model="ir.ui.view">
+            <field name="name">bzr.state.tree</field>
+            <field name="model">bzr.state</field>
+            <field name="arch" type="xml"></field>
+                <search string="ËÑË÷×´Ì¬">
+                    <field name="object"/>
+                    <field name="name"/>
+                </form>
+        </record>
+        
+    </data>
+</openerp>

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from openerp.osv import fields, osv
+from openerp.addons.bzr_base import get_states
 
 #年度     fi.year
 #TODO 我们真的需要会计年度么？
@@ -23,5 +24,5 @@ class fi_doc_type(osv.osv):
     'name':fields.char('会计期间',size=10,required=True),
     's_date':fields.date('开始日期',required=True),
     'e_date':fields.date('结束日期',required=True),
-    'state':fields.selection([],'状态'),
+    'state':fields.selection(get_states('fi.doc.type'),'状态'),
     }

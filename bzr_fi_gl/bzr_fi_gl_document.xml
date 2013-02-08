@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_fi_doc_form" model="ir.ui.view">
+            <field name="name">bzr_fi_gl.fi_doc.form</field>
+            <field name="model">bzr_fi_gl.fi_doc</field>
+            <field name="arch" type="xml">
+                <form string="会计凭证">
+                    <header>
+                        
+                    </header>
+                </form>
+            </field>
+        </record>
+    </data>
+</openerp>
