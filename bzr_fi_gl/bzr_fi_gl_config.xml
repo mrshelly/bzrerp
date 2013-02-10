@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <menuitem
+            id="menu_fi_config"
+            name="配置数据"
+            parent="menu_fi"
+            sequence="3"/>
+        <!-- 凭证字 -->
+        <record id="form_fi_doc_type" model="ir.ui.view">
+            <field name="name">form.fi.doc.type</field>
+            <field name="model">fi.doc.type</field>
+            <field name="arch" type="xml">
+                <form string="">
+                    <field name="name"/>
+                </form>
+            </field>
+        </record>
+        <record id="tree_fi_doc_type" model="ir.ui.view">
+            <field name="name">tree.fi.doc.type</field>
+            <field name="model">fi.doc.type</field>
+            <field name="arch" type="xml">
+                <tree string="">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        <record id="search_fi_doc_type" model="ir.ui.view">
+            <field name="name">search.fi.doc.type</field>
+            <field name="model">fi.doc.type</field>
+            <field name="arch" type="xml">
+                <search string="">
+                    <field name="name"/>
+                </search>
+            </field>
+        </record>
+        <record id="action_fi_doc_type" model="ir.actions.act_window">
+            <field name="name">凭证字</field>
+            <field name="res_model">fi.doc.type</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="tree_fi_doc_type"/>
+            <field name="search_view_id" ref="search_fi_doc_type"/>            
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                点击新建凭证字
+              </p><p>
+                凭证字用于对会计凭证进行分类
+              </p>
+            </field>
+        </record> 
+        <menuitem        
+            action="action_fi_doc_type"
+            id="menu_fi_doc_type"
+            parent="menu_fi_config"
+            sequence="1"/>
+        
+    </data>
+</openerp>

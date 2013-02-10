@@ -6,8 +6,9 @@
     'description': """
     """,
     'author': 'bzrerp team',
+    'sequence': 1,
     'depends': ['base'],
-    'data': [],
+    'data': ['bzr_base_view.xml'],
     'installable': True,
     'auto_install': True,
     'images': [],

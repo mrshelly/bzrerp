@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from openrp.osv import fields, osv
+from openerp.osv import fields, osv
+from openerp.addons.bzr_base import get_states
+import openerp.addons.decimal_precision as dp
 #会计凭证   fi.doc
 #会计凭证行 fi.doc.line
 #辅助核算行 fi.doc.line.cost
 
-class fi_doc_line_cost(osv.osv):
+class fi_doc(osv.osv):
     _name = 'fi.doc'
     _description = "会计凭证"
     _columns = {
@@ -28,8 +30,9 @@ class fi_doc_line_cost(osv.osv):
 #状态
 #TODO:此处改成从ir_states表读取
 # select key text from ir_states where object='fi.doc'
-        'state':fields.selection([('draft','不平衡')],'状态',required=True, 
-        readonly=True,help='控制会计凭证工作流'),
+        'state':fields.selection(get_states('fi.doc'),'状态',required=True, 
+        readonly=True,
+        help='控制会计凭证工作流'),
 #制单
         'create_uid':fields.many2one('res.users','制单',
         help='凭证制单人'),
@@ -40,22 +43,24 @@ class fi_doc_line_cost(osv.osv):
         'post_uid':fields.many2one('res.users','记账',
         help='凭证登帐人'),
     }
-
+    _defaults={
+        'state':'draft',
+    }
 
 class fi_doc_line(osv.osv):
     _name = 'fi.doc.line'
     _description = "会计凭证行"
     _columns = {
 #会计凭证
-        'doc_id':fields.many2one('fi.doc','会计凭证',required=True)
+        'doc_id':fields.many2one('fi.doc','会计凭证',required=True),
 #摘要
-        'text':fields.char('摘要',size=64,help='凭证行的摘要'),
+        'text':fields.char('摘要',size=64,help='凭证行的摘要',required=True),
 #会计科目
-        'acc_id':fields.many2one('fi.acc','会计科目',help='只能选择末级科目'),
+        'acc_id':fields.many2one('fi.acc','会计科目',help='只能选择末级科目',required=True),
 #借方
 #TODO 这里这个'Account'能否使用当前class的name？
         'debit': fields.float('借方',help='以公司本位币计的金额', 
-        ,digits_compute=dp.get_precision('Account')),
+        digits_compute=dp.get_precision('Account')),
 #贷方
         'credit': fields.float('贷方',help='以公司本位币计的金额',
         digits_compute=dp.get_precision('Account')),        
@@ -66,6 +71,8 @@ class fi_doc_line(osv.osv):
 
 
 class fi_doc_line_cost(osv.osv):
+    def _get_co(self,cr,uid,context=None):
+        return 'res.partner'
     _name = 'fi.doc.line.cost'
     _description = '辅助核算行'
     _columns = {
@@ -74,7 +81,7 @@ class fi_doc_line_cost(osv.osv):
 #类别
         'type':fields.char('辅助核算类别',size=64),
 #辅助核算项目
-        'co_obj':fields.reference('辅助核算项目'),
+        'co_obj':fields.reference('辅助核算项目',selection=_get_co,size=128),
 #金额
         'amount':fields.float('金额',
         digits_compute=dp.get_precision('Account')),
@@ -84,7 +91,7 @@ class fi_doc_line_cost(osv.osv):
         digits_compute=dp.get_precision('Account')),
 #单价
         'price':fields.float('单价',
-        digits_compute=dp.get_precision('Account'))
+        digits_compute=dp.get_precision('Account')),
 #业务伙伴相关
 #到期日
         'due':fields.date('到期日',help='往来欠款到期日，用于计算账龄'),
