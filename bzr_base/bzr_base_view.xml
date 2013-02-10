@@ -1,27 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
-        <!-- ״̬ -->
-        <record id="view_bzr_state_tree" model="ir.ui.view">
-            <field name="name">bzr.state.tree</field>
+        <!-- 状态 -->
+        <record id="tree_bzr_state" model="ir.ui.view">
+            <field name="name">tree.bzr.state</field>
             <field name="model">bzr.state</field>
-            <field name="arch" type="xml"></field>
-                <tree string="״̬">
+            <field name="arch" type="xml">
+                <tree string="状态" editable="top">
                     <field name="object"/>
                     <field name="seq"/>
                     <field name="key"/>
                     <field name="name"/>
-                </form>
+                </tree>
+            </field>
         </record>
-        <record id="view_bzr_state_search" model="ir.ui.view">
-            <field name="name">bzr.state.tree</field>
+        <record id="search_bzr_state" model="ir.ui.view">
+            <field name="name">search.bzr.state</field>
             <field name="model">bzr.state</field>
-            <field name="arch" type="xml"></field>
-                <search string="����״̬">
+            <field name="arch" type="xml">
+                <search string="状态">
                     <field name="object"/>
                     <field name="name"/>
-                </form>
+                </search>
+            </field>    
         </record>
+        <record id="action_bzr_state" model="ir.actions.act_window">
+            <field name="name">状态</field>
+            <field name="res_model">bzr.state</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="tree_bzr_state"/>
+            <field name="search_view_id" ref="search_bzr_state"/>            
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                新建状态配置
+              </p><p>
+                把OpenERP中单据的状态字段做成可配置的。
+              </p>
+            </field>
+        </record> 
+        
+        <menuitem
+            action="action_bzr_state"
+            id="menu_bzr_state"
+            name="状态"
+            parent="base.menu_res_company_global"
+            sequence="1"/>
         
     </data>
 </openerp>

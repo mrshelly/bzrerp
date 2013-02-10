@@ -30,8 +30,9 @@ class fi_doc(osv.osv):
 #状态
 #TODO:此处改成从ir_states表读取
 # select key text from ir_states where object='fi.doc'
-        'state':fields.selection(get_states('fi.doc.type'),'状态',required=True, 
-        readonly=True,help='控制会计凭证工作流'),
+        'state':fields.selection(get_states('fi.doc'),'状态',required=True, 
+        readonly=True,
+        help='控制会计凭证工作流'),
 #制单
         'create_uid':fields.many2one('res.users','制单',
         help='凭证制单人'),
@@ -42,7 +43,9 @@ class fi_doc(osv.osv):
         'post_uid':fields.many2one('res.users','记账',
         help='凭证登帐人'),
     }
-
+    _defaults={
+        'state':'draft',
+    }
 
 class fi_doc_line(osv.osv):
     _name = 'fi.doc.line'
@@ -51,9 +54,9 @@ class fi_doc_line(osv.osv):
 #会计凭证
         'doc_id':fields.many2one('fi.doc','会计凭证',required=True),
 #摘要
-        'text':fields.char('摘要',size=64,help='凭证行的摘要'),
+        'text':fields.char('摘要',size=64,help='凭证行的摘要',required=True),
 #会计科目
-        'acc_id':fields.many2one('fi.acc','会计科目',help='只能选择末级科目'),
+        'acc_id':fields.many2one('fi.acc','会计科目',help='只能选择末级科目',required=True),
 #借方
 #TODO 这里这个'Account'能否使用当前class的name？
         'debit': fields.float('借方',help='以公司本位币计的金额', 
