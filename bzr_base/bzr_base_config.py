@@ -16,7 +16,9 @@ def get_states(object):
     """
     取得该对象state字段的可选值，并按seq字段排序
     """
-    def states_list(self,cr,uid,ids):
+    def states_list(self,cr,uid,context=None):
+        if context==None:
+            context={}
         #TODO remove this SQL
         psql='select key, name from bzr_state where object=%s order by seq'
         cr.execute(psql, (object,))

@@ -9,7 +9,7 @@ import openerp.addons.decimal_precision as dp
 
 class fi_doc(osv.osv):
     _name = 'fi.doc'
-    _description = "会计凭证"
+    _description = '会计凭证'
     _columns = {
 #凭证日期
         'date':fields.date('凭证日期'),
@@ -28,8 +28,6 @@ class fi_doc(osv.osv):
         'line_ids':fields.one2many('fi.doc.line','doc_id','凭证行',
         states={'posted':[('readonly',True)]},help='过账后不可修改'),
 #状态
-#TODO:此处改成从ir_states表读取
-# select key text from ir_states where object='fi.doc'
         'state':fields.selection(get_states('fi.doc'),'状态',required=True, 
         readonly=True,
         help='控制会计凭证工作流'),

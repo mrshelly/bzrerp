@@ -20,7 +20,7 @@
             <field name="name">tree.fi.doc.type</field>
             <field name="model">fi.doc.type</field>
             <field name="arch" type="xml">
-                <tree string="">
+                <tree string="凭证字">
                     <field name="name"/>
                 </tree>
             </field>
@@ -29,7 +29,7 @@
             <field name="name">search.fi.doc.type</field>
             <field name="model">fi.doc.type</field>
             <field name="arch" type="xml">
-                <search string="">
+                <search string="凭证字">
                     <field name="name"/>
                 </search>
             </field>
@@ -54,6 +54,55 @@
             id="menu_fi_doc_type"
             parent="menu_fi_config"
             sequence="1"/>
+        <!-- 科目类型 -->
+        <record id="form_fi_acc_type" model="ir.ui.view">
+            <field name="name">form.fi.acc.type</field>
+            <field name="model">fi.acc.type</field>
+            <field name="arch" type="xml">
+                <form string="科目类型">
+                    <field name="name"/>
+                </form>
+            </field>
+        </record>
+        <record id="tree_fi_acc_type" model="ir.ui.view">
+            <field name="name">tree.fi.acc.type</field>
+            <field name="model">fi.acc.type</field>
+            <field name="arch" type="xml">
+                <tree string="科目类型">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        <record id="search_fi_acc_type" model="ir.ui.view">
+            <field name="name">search.fi.acc.type</field>
+            <field name="model">fi.acc.type</field>
+            <field name="arch" type="xml">
+                <search string="科目类型">
+                    <field name="name"/>
+                </search>
+            </field>
+        </record>
+        <record id="action_fi_acc_type" model="ir.actions.act_window">
+            <field name="name">科目类型</field>
+            <field name="res_model">fi.acc.type</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="tree_fi_acc_type"/>
+            <field name="search_view_id" ref="search_fi_acc_type"/>            
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                点击新建科目类型
+              </p><p>
+                凭证字用于对会计科目进行分类
+                确定科目必须的辅助核算类别和账簿格式
+              </p>
+            </field>
+        </record> 
+        <menuitem        
+            action="action_fi_acc_type"
+            id="menu_fi_acc_type"
+            parent="menu_fi_config"
+            sequence="2"/>
         
     </data>
 </openerp>

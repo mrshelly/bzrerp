@@ -26,10 +26,13 @@
                         <div align="center">
                             <h1>记账凭证</h1>
                         </div>
-                        <field name="date"/>
-                        <field name="type_id"/>
-                        <field name="number"/>
-                        <field name="ref_count"/>
+                        <group col="4">
+                            <field name="date"/>
+                            <field name="period_id"/>
+                            <field name="type_id"/>
+                            <field name="number"/>
+                            <field name="ref_count"/>
+                        </group>
                         <field name="line_ids">
                             <tree editable="bottom">
                                 <field name="text"/>
@@ -82,7 +85,7 @@
                 点击新建会计凭证
               </p><p>
                 会计凭证是会计模块的核心凭证
-              </p>
+              </p>              
             </field>
         </record>      
            
