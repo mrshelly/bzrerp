@@ -20,7 +20,6 @@ class fi_period(osv.osv):
     _name='fi.period'
     _description=u'会计期间'
     _columns={
-<<<<<<< HEAD
         'name':fields.char(u'会计期间',size=10,required=True),
         'year':fields.integer(u'年'),
         'month':fields.integer(u'月'),
