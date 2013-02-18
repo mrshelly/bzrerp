@@ -20,8 +20,10 @@
             <field name="name">tree.fi.acc</field>
             <field name="model">fi.acc</field>
             <field name="arch" type="xml">
-                <tree string="会计科目">
+                <tree string="会计科目" editable="bottom">
+                    <field name="code"/>
                     <field name="name"/>
+                    <field name="type"/>
                 </tree>
             </field>
         </record>
@@ -30,6 +32,7 @@
             <field name="model">fi.acc</field>
             <field name="arch" type="xml">
                 <search string="会计科目">
+                    <field name="code"/>
                     <field name="name"/>
                 </search>
             </field>
@@ -60,8 +63,18 @@
             <field name="name">form.fi.period</field>
             <field name="model">fi.period</field>
             <field name="arch" type="xml">
-                <form string="会计期间">
-                    <field name="name"/>
+                <form string="会计期间" version="7.0">
+                    <header>
+                        <button string="月结"/>
+                        <field name="state" widget="statusbar"/>    
+                    </header>
+                    <sheet string="会计期间">
+                        <field name="name"/>
+                        <field name="year"/>
+                        <field name="month"/>
+                        <field name="s_date"/>
+                        <field name="e_date"/> 
+                    </sheet>
                 </form>
             </field>
         </record>
