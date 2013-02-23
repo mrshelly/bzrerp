@@ -10,27 +10,71 @@ import openerp.addons.decimal_precision as dp
 class fi_doc(osv.osv):
     _name = 'fi.doc'
     _description = u'会计凭证'
+    
+    def _amount_compute(self, cr, uid, ids, name, args, context, where =''):
+        if not ids: return {}
+        cr.execute( 'SELECT doc_id, SUM(debit) '\
+                    'FROM fi_doc_line '\
+                    'WHERE doc_id IN %s '\
+                    'GROUP BY doc_id', (tuple(ids),))
+        result = dict(cr.fetchall())
+        for id in ids:
+            result.setdefault(id, 0.0)
+        return result
+    
+    def _search_amount(self, cr, uid, obj, name, args, context):
+        ids = set()
+        for cond in args:
+            amount = cond[2]
+            if isinstance(cond[2],(list,tuple)):
+                if cond[1] in ['in','not in']:
+                    amount = tuple(cond[2])
+                else:
+                    continue
+            else:
+                if cond[1] in ['=like', 'like', 'not like', \
+                    'ilike', 'not ilike', 'in', 'not in', 'child_of']:
+                    continue
+    
+            cr.execute('select doc_id from fi_doc_line group by doc_id ' \
+                       'having sum(debit) %s %%s' % (cond[1]),(amount,))
+            res_ids = set(id[0] for id in cr.fetchall())
+            ids = ids and (ids & res_ids) or res_ids
+        if ids:
+            return [('id', 'in', tuple(ids))]
+        return [('id', '=', '0')]
+    
     _columns = {
+        'company_id': fields.many2one('res.company', u'公司', 
+                      required=True, select=1),
 #凭证日期
-        'date':fields.date(u'凭证日期'),
+        'date':fields.date(u'凭证日期'required=True,),
 #会计期间
         'period_id':fields.many2one('fi.period',u'期间',required=True,
-        states={'posted':[('readonly',True)]},help=u'过账后不可修改'),        
+                    states={'posted':[('readonly',True)]}),        
 #凭证字
         'type_id':fields.many2one('fi.doc.type','凭证字',required=True,
-        help=u'可在配置中自定义'),
+                  help=u'可在配置中自定义'),
 #凭证号
         'number':fields.char(u'凭证编号',size=64,
-        help=u'由系统自动生成，结帐前可重排'),
+                 help=u'由系统自动生成，结帐前可重排'),
 #附单据数
         'ref_count':fields.integer(u'附单据数',help=u'凭证后附原始凭证的页数'),
 #凭证行
         'line_ids':fields.one2many('fi.doc.line','doc_id',u'凭证行',
         states={'posted':[('readonly',True)]},help=u'过账后不可修改'),
+        'amount': fields.function(_amount_compute, string=u'金额', 
+                  digits_compute=dp.get_precision('Account'), 
+                  type='float', fnct_search=_search_amount),
 #状态
         'state':fields.selection(get_states('fi.doc'),u'状态',required=True, 
         readonly=True,
         help=u'控制会计凭证工作流'),
+#备注
+        'note':fields.text(u'备注'),
+#修正意见
+        'needfix':fields.char(u'修正意见',size=128,
+                  help=u'审核人发现的问题在这里描述，制单人修正后清空此字段'),
 #制单
         'create_uid':fields.many2one('res.users',u'制单',
         help=u'凭证制单人'),
@@ -41,9 +85,49 @@ class fi_doc(osv.osv):
         'post_uid':fields.many2one('res.users',u'记账',
         help=u'凭证登帐人'),
     }
-    _defaults={
-        'state':'draft',
+    _defaults = {
+        'number': '/',
+        'state': 'draft',
+        'period_id': _get_period,
+        'date': fields.date.context_today,
+        'company_id': lambda self, cr, uid, c: \
+            self.pool.get('res.users').browse(cr, uid, uid, c).company_id.id,
     }
+# 审批按钮
+    def button_approve(self, cursor, user, ids, context=None):
+        return self.approve(cursor, user, ids, context=context)
+# 登账按钮
+    def button_post((self, cursor, user, ids, context=None):
+        return self.post(cursor, user, ids, context=context)
+# 批量登帐            
+    def post(self, cr, uid, ids, context=None):
+        if context is None:
+            context = {}
+#TODO 这里可以提出来做成一个修改state的一个通用方法。
+#再加self._tablename做第一个参数
+        cr.execute('UPDATE fi_doc '\
+                   'SET state=%s '\
+                   'WHERE id IN %s',
+                   ('posted', tuple(ids),))
+        return True
+
+    def approve(self, cr, uid, ids, context=None):
+        if context is None:
+            context = {}
+        cr.execute('UPDATE fi_doc '\
+                   'SET state=%s '\
+                   'WHERE id IN %s',
+                   ('approved', tuple(ids),))
+        return True
+    def redo(self, cr, uid, ids, context=None):
+        if context is None:
+            context = {}
+        cr.execute('UPDATE fi_doc '\
+                   'SET state=%s '\
+                   'WHERE id IN %s',
+                   ('draft', tuple(ids),))
+        return True
+      
 
 class fi_doc_line(osv.osv):
     _name = 'fi.doc.line'
@@ -80,9 +164,13 @@ class fi_doc_line_cost(osv.osv):
         'type':fields.char(u'辅助核算类别',size=64),
 #辅助核算项目
         'co_obj':fields.reference(u'辅助核算项目',selection=_get_co,size=128),
-#金额
-        'amount':fields.float(u'金额',
+#借方
+#TODO 这里这个'Account'能否使用当前class的name？
+        'debit': fields.float(u'借方',help=u'以公司本位币计的金额', 
         digits_compute=dp.get_precision('Account')),
+#贷方
+        'credit': fields.float(u'贷方',help=u'以公司本位币计的金额',
+        digits_compute=dp.get_precision('Account')),  
 #产品相关
 #数量
         'quantity':fields.float(u'数量',
