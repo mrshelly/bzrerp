@@ -48,7 +48,7 @@ class fi_doc(osv.osv):
         'company_id': fields.many2one('res.company', u'公司', 
                       required=True, select=1),
 #凭证日期
-        'date':fields.date(u'凭证日期'required=True,),
+        'date':fields.date(u'凭证日期',required=True,),
 #会计期间
         'period_id':fields.many2one('fi.period',u'期间',required=True,
                     states={'posted':[('readonly',True)]}),        
@@ -88,7 +88,9 @@ class fi_doc(osv.osv):
     _defaults = {
         'number': '/',
         'state': 'draft',
-        'period_id': _get_period,
+        'period_id': lambda self, cr, uid, c: \
+            self.pool.get('fi.period').find(cr,uid),
+
         'date': fields.date.context_today,
         'company_id': lambda self, cr, uid, c: \
             self.pool.get('res.users').browse(cr, uid, uid, c).company_id.id,
@@ -97,38 +99,40 @@ class fi_doc(osv.osv):
     def button_approve(self, cursor, user, ids, context=None):
         return self.approve(cursor, user, ids, context=context)
 # 登账按钮
-    def button_post((self, cursor, user, ids, context=None):
+    def button_post(self, cursor, user, ids, context=None):
         return self.post(cursor, user, ids, context=context)
+# 审批拒绝
+    def button_redo(self, cursor, user, ids, context=None):
+        return self.redo(cursor, user, ids, context=context)
 # 批量登帐            
     def post(self, cr, uid, ids, context=None):
         if context is None:
             context = {}
-#TODO 这里可以提出来做成一个修改state的一个通用方法。
-#再加self._tablename做第一个参数
-        cr.execute('UPDATE fi_doc '\
-                   'SET state=%s '\
-                   'WHERE id IN %s',
-                   ('posted', tuple(ids),))
+        self.write(cr,uid,ids,{'post_uid':uid,'state':'posted'})
         return True
 
     def approve(self, cr, uid, ids, context=None):
         if context is None:
             context = {}
-        cr.execute('UPDATE fi_doc '\
-                   'SET state=%s '\
-                   'WHERE id IN %s',
-                   ('approved', tuple(ids),))
+        self.write(cr,uid,ids,{'approve_uid':uid,'state':'approved'})
         return True
     def redo(self, cr, uid, ids, context=None):
         if context is None:
             context = {}
-        cr.execute('UPDATE fi_doc '\
-                   'SET state=%s '\
-                   'WHERE id IN %s',
-                   ('draft', tuple(ids),))
-        return True
-      
-
+        self.write(cr,uid,ids,{'state':'draft','approve_uid':None,'post_uid':None})
+        return True 
+    def copy(self, cr, uid, id, default=None, context=None):
+        default = {} if default is None else default.copy()
+        context = {} if context is None else context.copy()
+        default.update({
+            'state':'draft',
+            'name':'/',
+        })
+        context.update({
+            'copy':True
+        })
+        return super(fi_doc, self).copy(cr, uid, id, default, context)
+            
 class fi_doc_line(osv.osv):
     _name = 'fi.doc.line'
     _description = u'会计凭证行'
@@ -154,7 +158,7 @@ class fi_doc_line(osv.osv):
 
 class fi_doc_line_cost(osv.osv):
     def _get_co(self,cr,uid,context=None):
-        return 'res.partner'
+        return [('res.partner','往来')]
     _name = 'fi.doc.line.cost'
     _description = u'辅助核算行'
     _columns = {

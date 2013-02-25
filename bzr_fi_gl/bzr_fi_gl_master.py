@@ -4,7 +4,7 @@
 # 会计科目 fi.acc
 from openerp.osv import fields, osv
 from openerp.addons.bzr_base import get_states
-
+from openerp.tools.translate import _
 
 class fi_acc(osv.osv):
     _name='fi.acc'
@@ -18,7 +18,8 @@ class fi_acc(osv.osv):
         'parent_id': fields.many2one('fi.acc',u'上级科目',ondelete='cascade'),
         'child_ids': fields.one2many('fi.acc','parent_id',u'下级科目'),
         'note': fields.text(u'备注'),  
-        'active': fields.boolean(u'启用'),      
+        'active': fields.boolean(u'启用'),
+        'report_id':fields.many2one('fi.report',u'报表行'),      
     }
     _defaults={
         'active': True,
@@ -59,7 +60,7 @@ class fi_period(osv.osv):
         if context is None: context = {}
         if not dt:
             dt = fields.date.context_today(self,cr,uid,context=context)
-        args = [('date_start', '<=' ,dt), ('date_stop', '>=', dt)]
+        args = [('s_date', '<=' ,dt), ('e_date', '>=', dt)]
         if context.get('company_id', False):
             args.append(('company_id', '=', context['company_id']))
         else:
@@ -69,5 +70,5 @@ class fi_period(osv.osv):
         result = self.search(cr, uid, args, context=context)
         if not result:
             raise osv.except_osv(_(u'错误'), \
-                                 _(u'无法根据输入的日期找到期间')%dt)
+                                 _(u'无法根据输入的日期 %s 找到期间')%dt)
         return result
