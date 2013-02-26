@@ -5,7 +5,7 @@
             id="menu_fi_master"
             name="主数据"
             parent="menu_fi"
-            sequence="2"/>
+            sequence="3"/>
         <!-- 会计科目 -->
         <record id="form_fi_acc" model="ir.ui.view">
             <field name="name">form.fi.acc</field>

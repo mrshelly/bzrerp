@@ -20,6 +20,7 @@ class fi_acc_type(osv.osv):
 class fi_report(osv.osv):
     _name='fi.report'
     _description=u'报表行'
+    _order='sequence'
     _columns={
         'name':fields.char(u'文本',size=128,required=True,translate=True),
         'sequence':fields.integer(u'行号'),

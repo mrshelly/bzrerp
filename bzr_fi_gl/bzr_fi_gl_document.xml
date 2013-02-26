@@ -10,7 +10,7 @@
                   id="menu_fi_document"
                   name="业务数据"
                   parent="menu_fi"
-                  sequence="1"/>
+                  sequence="2"/>
 
         <!-- 会计凭证 -->    
         <record id="form_fi_doc" model="ir.ui.view">

@@ -5,7 +5,7 @@
             id="menu_fi_config"
             name="配置数据"
             parent="menu_fi"
-            sequence="3"/>
+            sequence="4"/>
         <!-- 凭证字 -->
         <record id="form_fi_doc_type" model="ir.ui.view">
             <field name="name">form.fi.doc.type</field>
@@ -113,6 +113,7 @@
                     <field name="name"/>
                     <field name="parent_id"/>
                     <field name="reverse"/>
+                    <field name="children_ids"/>
                 </form>
             </field>
         </record>
