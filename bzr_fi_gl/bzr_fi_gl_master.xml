@@ -5,14 +5,21 @@
             id="menu_fi_master"
             name="主数据"
             parent="menu_fi"
-            sequence="2"/>
+            sequence="3"/>
         <!-- 会计科目 -->
         <record id="form_fi_acc" model="ir.ui.view">
             <field name="name">form.fi.acc</field>
             <field name="model">fi.acc</field>
             <field name="arch" type="xml">
                 <form string="会计科目">
+                    <field name="company_id"/>
+                    <field name="code"/>
                     <field name="name"/>
+                    <field name="type"/>
+                    <field name="parent_id"/>
+                    <field name="report_id"/>
+                    <field name="active"/>
+                    <field name="note"/>
                 </form>
             </field>
         </record>
@@ -20,7 +27,7 @@
             <field name="name">tree.fi.acc</field>
             <field name="model">fi.acc</field>
             <field name="arch" type="xml">
-                <tree string="会计科目" editable="bottom">
+                <tree string="会计科目">
                     <field name="code"/>
                     <field name="name"/>
                     <field name="type"/>
@@ -58,6 +65,63 @@
             id="menu_fi_acc"
             parent="menu_fi_master"
             sequence="1"/>
+        <!-- 会计年度 -->
+        <record id="form_fi_year" model="ir.ui.view">
+            <field name="name">form.fi.year</field>
+            <field name="model">fi.year</field>
+            <field name="arch" type="xml">
+                <form string="会计年度">
+                    <field name="company_id"/>
+                    <field name="name"/>
+                    <field name="s_date"/>
+                    <field name="e_date"/> 
+                    <field name="period_ids"/>
+                </form>
+            </field>
+        </record>
+        <record id="tree_fi_year" model="ir.ui.view">
+            <field name="name">tree.fi.year</field>
+            <field name="model">fi.year</field>
+            <field name="arch" type="xml">
+                <tree string="会计年度">
+                    <field name="company_id"/>
+                    <field name="name"/>
+                    <field name="s_date"/>
+                    <field name="e_date"/>                    
+                </tree>
+            </field>
+        </record>
+        <record id="search_fi_year" model="ir.ui.view">
+            <field name="name">search.fi.year</field>
+            <field name="model">fi.year</field>
+            <field name="arch" type="xml">
+                <search string="会计年度">
+                    <field name="name"/>
+                </search>
+            </field>
+        </record>
+        <record id="action_fi_year" model="ir.actions.act_window">
+            <field name="name">会计年度</field>
+            <field name="res_model">fi.year</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form,tree</field>
+            <field name="view_id" ref="tree_fi_year"/>
+            <field name="search_view_id" ref="search_fi_year"/>            
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                点击新建会计年度
+              </p><p>
+                会计年度是会计年结的核心主数据
+              </p>
+            </field>
+        </record> 
+
+        <menuitem
+            action="action_fi_year"
+            id="menu_fi_year"
+            parent="menu_fi_master"
+            sequence="2"/>
+
         <!-- 会计期间 -->
         <record id="form_fi_period" model="ir.ui.view">
             <field name="name">form.fi.period</field>
@@ -69,8 +133,9 @@
                         <field name="state" widget="statusbar"/>    
                     </header>
                     <sheet string="会计期间">
+                        <field name="company_id"/>
                         <field name="name"/>
-                        <field name="year"/>
+                        <field name="year_id"/>
                         <field name="month"/>
                         <field name="s_date"/>
                         <field name="e_date"/> 
@@ -82,7 +147,7 @@
             <field name="name">tree.fi.period</field>
             <field name="model">fi.period</field>
             <field name="arch" type="xml">
-                <tree string="会计期间" editable="bottom">
+                <tree string="会计期间">
                     <field name="name"/>
                     <field name="s_date"/>
                     <field name="e_date"/>                    
@@ -118,7 +183,7 @@
             action="action_fi_period"
             id="menu_fi_period"
             parent="menu_fi_master"
-            sequence="2"/>
+            sequence="3"/>
         
     </data>
 </openerp>

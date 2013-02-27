@@ -10,7 +10,7 @@
                   id="menu_fi_document"
                   name="业务数据"
                   parent="menu_fi"
-                  sequence="1"/>
+                  sequence="2"/>
 
         <!-- 会计凭证 -->    
         <record id="form_fi_doc" model="ir.ui.view">
@@ -19,14 +19,18 @@
             <field name="arch" type="xml">
                 <form string="会计凭证" version="7.0">
                     <header>
-                        <button string="复核"/>
+                        <button string="复核" type="object" name="button_approve"/>
+                        <button string="记账" type="object" name="button_post"/>
+                        <button string="重制" type="object" name="button_redo"/>
                         <field name="state" widget="statusbar"/>    
                     </header>
                     <sheet string="会计凭证">
                         <div align="center">
                             <h1>记账凭证</h1>
                         </div>
+                        <field name="needfix" placeholder="如审核时发现有问题，请写在这里。以便制单人据此修正..."/>
                         <group col="4">
+                            <field name="company_id"/>
                             <field name="date"/>
                             <field name="period_id"/>
                             <field name="type_id"/>
@@ -34,7 +38,7 @@
                             <field name="ref_count"/>
                         </group>
                         <field name="line_ids">
-                            <tree editable="bottom">
+                            <tree>
                                 <field name="text"/>
                                 <field name="acc_id"/>
                                 <field name="debit"/>
@@ -45,10 +49,36 @@
                             其他信息，如何切换？
                             -->
                             <form>
-                                <field name="cost_ids">
+                                <group col="4">
+                                    <field name="text"/>
+                                    <field name="acc_id"/>
+                                    <field name="debit"/>
+                                    <field name="credit"/> 
+                                </group>  
+                                <newline/>                             
+                                <field name="cost_ids" nolebel="1">
+                                    <tree>
+                                        <field name="co_obj"/>
+                                        <field name="debit"/>
+                                        <field name="credit"/>
+                                    </tree>
+                                    <form>
+                                        <field name="co_obj"/>
+                                        <field name="debit"/>
+                                        <field name="credit"/>
+                                        <field name="quantity"/>
+                                        <field name="price"/>
+                                        <field name="due"/>
+                                    </form>
                                 </field>
                             </form>
                         </field>
+                        <group>
+                            <field name="note"/>
+                            <field name="create_uid"/>
+                            <field name="approve_uid"/>
+                            <field name="post_uid"/>
+                        </group>
                     </sheet>
                 </form>
             </field>
@@ -57,10 +87,11 @@
             <field name="name">tree.fi.doc</field>
             <field name="model">fi.doc</field>
             <field name="arch" type="xml">
-                <tree string="会计凭证">
+                <tree string="会计凭证" colors="red:needfix">
                     <field name="date"/>
                     <field name="type_id"/>
                     <field name="number"/>
+                    <field name="needfix"/>
                 </tree>
             </field>
         </record>
