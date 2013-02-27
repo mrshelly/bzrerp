@@ -29,4 +29,23 @@ class fi_report(osv.osv):
         'reverse':fields.boolean(u'金额取反'),
     }
     
-
+    def get_amount(self,cr,uid,id,period_id,context=None):
+        '''报表行的金额'''
+        result ={
+        'report':id,            #科目
+        'period':period_id,      #期间
+        'year_start':0.00,       #年初余额
+        'year_debit':0.00,       #本年借方
+        'year_credit':0.00,      #本年贷方
+        'period_start':0.00,     #期初余额             
+        'period_debit':0.00,     #本期借方
+        'period_credit':0.00,    #本期贷方
+        'period_end':0.00,       #期末余额
+        }
+        
+        # 如有下级表行，汇总下级表行金额
+        return result
+        # 如无下级表行，取得表行科目
+        # 遍历科目并调用get_amount方法，汇总
+        # 如表行需取反，结果乘以 -1
+        return result

@@ -133,12 +133,14 @@
                         <field name="state" widget="statusbar"/>    
                     </header>
                     <sheet string="会计期间">
+                        <group>
                         <field name="company_id"/>
                         <field name="name"/>
                         <field name="year_id"/>
                         <field name="month"/>
                         <field name="s_date"/>
                         <field name="e_date"/> 
+                        </group>
                     </sheet>
                 </form>
             </field>
