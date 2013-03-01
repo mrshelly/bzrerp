@@ -18,6 +18,7 @@
                     <field name="type"/>
                     <field name="parent_id"/>
                     <field name="report_id"/>
+                    <field name="reverse"/>
                     <field name="active"/>
                     <field name="note"/>
                 </form>
@@ -30,7 +31,14 @@
                 <tree string="会计科目">
                     <field name="code"/>
                     <field name="name"/>
-                    <field name="type"/>
+                    <field name="year_start"/>
+                    <field name="year_debit"/>
+                    <field name="year_credit"/>                   
+                    <field name="period_start"/>
+                    <field name="period_debit"/>
+                    <field name="period_credit"/>
+                    <field name="period_end"/>
+                    
                 </tree>
             </field>
         </record>
@@ -129,7 +137,7 @@
             <field name="arch" type="xml">
                 <form string="会计期间" version="7.0">
                     <header>
-                        <button string="月结"/>
+                        <button string="月结" name="close" states="draft" type="object"/>
                         <field name="state" widget="statusbar"/>    
                     </header>
                     <sheet string="会计期间">

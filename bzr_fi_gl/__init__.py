@@ -8,3 +8,5 @@ import bzr_fi_gl_master
 
 #业务数据
 import bzr_fi_gl_document
+
+import report

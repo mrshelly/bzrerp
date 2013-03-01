@@ -152,7 +152,12 @@ class fi_doc_line(osv.osv):
         digits_compute=dp.get_precision('Account')),        
 
 #辅助核算行
-        'cost_ids':fields.one2many('fi.doc.line.cost','line_id',u'辅助核算行'),   
+        'cost_ids':fields.one2many('fi.doc.line.cost','line_id',u'辅助核算行'),
+
+# 从凭证上复制一些字段过来
+#TODO 复制凭证时这个字段的值会带入新凭证，即使新凭证的期间值改了也不更新这里，注意
+        'period_id':fields.related('doc_id','period_id',type='many2one', 
+          relation='fi.period', string='期间', store=True, readonly=True),
     }
 
 

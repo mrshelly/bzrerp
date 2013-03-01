@@ -112,7 +112,6 @@
                     <field name="sequence"/>
                     <field name="name"/>
                     <field name="parent_id"/>
-                    <field name="reverse"/>
                     <field name="children_ids"/>
                 </form>
             </field>
@@ -125,7 +124,7 @@
                     <field name="sequence"/>
                     <field name="name"/>
                     <field name="parent_id"/>
-                    <field name="reverse"/>
+                    <field name="period_end"/>
                 </tree>
             </field>
         </record>
