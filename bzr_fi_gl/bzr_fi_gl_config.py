@@ -70,7 +70,7 @@ class fi_report(osv.osv):
         
         # 如未输入期间，取当前期间
         if period_id==None:
-            period_id=obj_period.find(cr,uid,fields.date.context_today(self._name,cr,uid),context)
+            period_id=obj_period.find(cr,uid,fields.date.context_today(self,cr,uid),context)
         
         this_report = self.read(cr,uid,id,['children_ids',
                      'account_ids','reverse'],context=context)
