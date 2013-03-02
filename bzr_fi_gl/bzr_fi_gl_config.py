@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from openerp.osv import fields, osv
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 import openerp.addons.decimal_precision as dp
 #凭证类型 fi.doc.type
     
@@ -23,8 +25,10 @@ class fi_report(osv.osv):
     _order='sequence'
     def __compute(self, cr, uid, ids, field_name, arg, context=None):
         result={}
+        period=self.pool.get('fi.period').find(cr,uid,
+                  fields.date.context_today(self,cr,uid),context)        
         for report in self.browse(cr, uid, ids, context=context):
-            result[report.id] = self.get_amount(cr,uid,report.id,None,context)
+            result[report.id] = self.get_amount(cr,uid,report.id,period,context)
         return result
 
     
@@ -51,7 +55,7 @@ class fi_report(osv.osv):
     }
 
     
-    def get_amount(self,cr,uid,id,period_id=None,context=None):
+    def get_amount(self,cr,uid,id,period_id,context=None):
         '''报表行的金额'''
         result ={
 #        'report':id,             #报表行
@@ -67,10 +71,6 @@ class fi_report(osv.osv):
         
         obj_period = self.pool.get('fi.period')
         obj_acc = self.pool.get('fi.acc')
-        
-        # 如未输入期间，取当前期间
-        if period_id==None:
-            period_id=obj_period.find(cr,uid,fields.date.context_today(self,cr,uid),context)
         
         this_report = self.read(cr,uid,id,['children_ids',
                      'account_ids','reverse'],context=context)
@@ -98,3 +98,35 @@ class fi_report(osv.osv):
             result['period_end']+=l['period_end']
 
         return result
+class fi_year(osv.osv):
+    _name='fi.year'
+    _description=u'会计年度'
+    _columns = {
+        'name':fields.char(u'会计年度',size=64,required=True),
+        'company_id':fields.many2one('res.company',u'公司'),
+        's_date':fields.date('开始日期',required=True),
+        'e_date':fields.date(u'结束日期',required=True),
+        'period_ids':fields.one2many('fi.period','year_id','期间'),
+    }
+    _order = 's_date'
+    
+    def create_period(self, cr, uid, ids, context=None, interval=1):
+        period_obj = self.pool.get('fi.period')
+        for fy in self.browse(cr, uid, ids, context=context):
+            ds = datetime.strptime(fy.s_date, '%Y-%m-%d')
+            while ds.strftime('%Y-%m-%d') < fy.e_date:
+                de = ds + relativedelta(months=interval, days=-1)
+
+                if de.strftime('%Y-%m-%d') > fy.e_date:
+                    de = datetime.strptime(fy.e_date, '%Y-%m-%d')
+
+                period_obj.create(cr, uid, {
+                    'company_id':1,#fy.company_id,
+                    'name': ds.strftime('%Y%m'),
+                    'month':int(ds.strftime('%m')),
+                    's_date': ds.strftime('%Y-%m-%d'),
+                    'e_date': de.strftime('%Y-%m-%d'),
+                    'year_id': fy.id,
+                })
+                ds = ds + relativedelta(months=interval)
+        return True
