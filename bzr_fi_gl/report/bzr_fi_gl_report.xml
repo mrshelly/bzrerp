@@ -15,9 +15,10 @@
                     <field name="sequence"/>
                     <field name="name"/>
                     <field name="parent_id" invisible="1"/>
-<!-- TODO: 期初余额 本期借方 本期贷方 期末余额 
-要不要     年初余额 本年借方 本年贷方 ？
--->
+                    <field name="period_start"/>
+                    <field name="period_debit"/>
+                    <field name="period_credit"/>
+                    <field name="period_end"/>
                 </tree>
             </field>
         </record>
