@@ -10,3 +10,5 @@ import bzr_fi_gl_master
 import bzr_fi_gl_document
 
 import report
+
+import wizard

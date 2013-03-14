@@ -32,6 +32,7 @@ class fi_acc(osv.osv):
         'child_ids': fields.one2many('fi.acc','parent_id',u'下级科目'),
         'note': fields.text(u'备注'),  
         'active': fields.boolean(u'启用'),
+        'format': fields.char(u'报表格式',size=64),
         'report_id':fields.many2one('fi.report',u'报表行',domain=[('children_ids','=',None)]),
         'reverse':fields.boolean(u'余额取反'),
         'year_start':fields.function(__compute, digits_compute=dp.get_precision('Account'), 
@@ -51,6 +52,7 @@ class fi_acc(osv.osv):
     }
     _defaults={
         'active': True,
+        'format': 'fi.detail.ledger'
     }
     def get_amount(self,cr,uid,id,period_id,context=None):
         ''' 返回科目的余额和发生额 '''
@@ -158,7 +160,7 @@ class fi_period(osv.osv):
     _defaults={
         'state':'draft',
     }
-    _order = 's_date'
+    _order = 's_date asc'
     def find(self, cr, uid, dt=None, context=None):
         if context is None: context = {}
         if not dt:

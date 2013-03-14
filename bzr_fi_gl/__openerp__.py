@@ -17,6 +17,7 @@
              'bzr_fi_gl_config.xml',
              'data/bzr_fi_gl_data.xml',
              'report/bzr_fi_gl_report.xml',
+             'wizard/bzr_fi_gl_wizard.xml',
     ],
     'demo': [
     ],
