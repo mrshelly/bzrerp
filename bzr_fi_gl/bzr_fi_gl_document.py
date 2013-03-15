@@ -142,7 +142,7 @@ class fi_doc_line(osv.osv):
 #摘要
         'text':fields.char(u'摘要',size=64,help=u'凭证行的摘要',required=True),
 #会计科目
-        'acc_id':fields.many2one('fi.acc',u'会计科目',help=u'只能选择末级科目',required=True),
+        'acc_id':fields.many2one('fi.acc',u'会计科目',help=u'只能选择末级科目',required=True,domain=[('child_ids','=',False)]),
 #借方
 #TODO 这里这个'Account'能否使用当前class的name？
         'debit': fields.float(u'借方',help=u'以公司本位币计的金额', 

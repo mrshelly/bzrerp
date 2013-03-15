@@ -150,8 +150,9 @@ class fi_period(osv.osv):
         'name':fields.char(u'会计期间',size=10,required=True),
         'company_id': fields.many2one('res.company', u'公司', 
               required=True, select=1),
-        'year_id':fields.many2one('fi.year',u'年度'),
-        'month':fields.integer(u'月'),
+        # 界面上只允许在年度上创建期间，如果年度被删除，未使用的期间也要被删除
+        'year_id':fields.many2one('fi.year',u'年度',required=True,ondelete='cascade'),
+        'month':fields.integer(u'月'), #Shelly说需要这个字段，不知用在何处
         's_date':fields.date(u'开始日期',required=True),
         'e_date':fields.date(u'结束日期',required=True),
         'state':fields.selection(get_states('fi.period'),u'状态',
@@ -161,6 +162,28 @@ class fi_period(osv.osv):
         'state':'draft',
     }
     _order = 's_date asc'
+    
+    def _validate_duration(self,cr,uid,ids,context=None):
+        for this_period in self.browse(cr, uid, ids, context=context):
+            # 开始日期不能大于结束日期
+            if this_period.s_date > this_period.e_date:
+                return False
+            # 结束日期不能大于年末日期,开始日期不能小于年初日期
+            if this_period.year_id.e_date < this_period.e_date or \
+               this_period.year_id.s_date > this_period.s_date:
+                return False
+            # 同一公司不能有时间重叠的期间
+            pids = self.search(cr, uid, [('e_date','>=',this_period.e_date),
+                                         ('s_date','<=',this_period.e_date),
+                                         ('id','<>',this_period.id)])
+            for period in self.browse(cr, uid, pids):
+                if period.year_id.company_id.id==this_period.year_id.company_id.id:
+                    return False
+        return True
+    _constraints = [
+        (_validate_duration, u'\n\n 输入的期间无效。\n\n 公司不能有日期重叠的两个期间 \n\n 开始日期不能在结束日期之后 \n\n 期间的起止日期应在年度内 ',[u'开始日期',u'结束日期']),
+    ]
+    
     def find(self, cr, uid, dt=None, context=None):
         if context is None: context = {}
         if not dt:

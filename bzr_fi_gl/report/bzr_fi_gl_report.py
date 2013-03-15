@@ -3,7 +3,6 @@ from report import report_sxw
 from openerp.osv import fields, osv
 import openerp.addons.decimal_precision as dp
 import time
-from report import report_sxw
 from tools.translate import _
 
 class fi_acc_balance(osv.osv):
