@@ -34,6 +34,5 @@
             id="menu_fi_report_tree"
             parent="menu_fi_reporting"
             sequence="3"/>
-                
     </data>
 </openerp>

@@ -101,7 +101,7 @@
             <field name="name">tree.fi.period</field>
             <field name="model">fi.period</field>
             <field name="arch" type="xml">
-                <tree string="会计期间">
+                <tree string="会计期间" create="false" delete="false">
                     <field name="name"/>
                     <field name="s_date"/>
                     <field name="e_date"/>                    
