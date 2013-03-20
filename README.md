@@ -39,8 +39,7 @@ What——关于bzrERP产品
 3、项目范围是一组功能模块，包括财务加进销存的核心模块及满足行业特殊需求的模块
 
 4、这些模块都以openobject [20130305源码包](http://nightly.openerp.com/7.0/nightly/src/openerp-7.0-20130305-002149.tar.gz) 
-[20130305绿色版](http://sourceforge.net/projects/greenopenerp/files/GreenOpenERP-7.0-20130305-002149.7z/download) from 
-[步科](http://buke.github.com/) 版本为平台开发
+[步科20130305绿色版](http://sourceforge.net/projects/greenopenerp/files/GreenOpenERP-7.0-20130305-002149.7z/download) 版本为平台开发
 
 5、模块全部放在 osbzr/bzrerp mater分支的根目录下，每个模块一个目录
 
