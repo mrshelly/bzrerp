@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!-- 菜单项 -->
+            <menuitem id="menu_bzr_hr_master" name="人力资源" parent="base.menu_bzr_hr" sequence="100"/>
+
+        <!-- 部门 -->
+            <record id="bzr_hr_department_form" model="ir.ui.view">
+                <field name="name">bzr.hr.department.form</field>
+                <field name="model">bzr.hr.department</field>
+                <field name="arch" type="xml">
+                    <form string="部门">
+                        <field name="name"/>
+                        <field name="parent_id"/>
+                        <field name="company_id"/>
+                        <newline/>
+                        <field name="manager_id" colspan="4"/>
+                        <field name="member_ids" colspan="4" widget="many2many_tags" placeholder="输入员工姓名..."/>
+                        <field name="child_ids" colspan="4"/>
+                    </form>
+                </field>
+            </record>
+            <record id="bzr_hr_department_tree" model="ir.ui.view">
+                <field name="name">bzr.hr.department.tree</field>
+                <field name="model">bzr.hr.department</field>
+                <field name="arch" type="xml">
+                    <tree string="部门">
+                        <field name="name"/>
+                        <field name="company_id"/>
+                        <field name="parent_id"/>
+                        <field name="manager_id"/>
+                        <field name="child_ids"/>
+                        <field name="member_ids"/>
+                    </tree>
+                </field>
+            </record>
+            <record id="bzr_hr_department_search" model="ir.ui.view">
+                <field name="name">bzr.hr.department.search</field>
+                <field name="model">bzr.hr.department</field>
+                <field name="arch" type="xml">
+                    <search string="部门">
+                        <field name="name"/>
+                        <field name="company_id"/>
+                        <field name="parent_id"/>
+                        <field name="manager_id"/>
+                        <field name="child_ids"/>
+                        <field name="member_ids"/>
+                    </search>
+                </field>
+            </record>
+            <!-- ============================= -->
+            <record id="action_bzr_hr_department_tree" model="ir.actions.act_window">
+                <field name="name">部门</field>
+                <field name="res_model">bzr.hr.department</field>
+                <field name="view_type">form</field>
+                <field name="view_mode">tree,form</field>
+                <field name="view_id" ref="bzr_hr_department_tree"/>
+                <field name="search_view_id" ref="bzr_hr_department_search"/>
+            </record>
+            <menuitem id="menu_action_bzr_hr_department_tree" action="action_bzr_hr_department_tree" parent="menu_bzr_hr_master"/>
+
+        <!-- 员工 -->
+            <record id="bzr_hr_employee_form" model="ir.ui.view">
+                <field name="name">bzr.hr.employee.form</field>
+                <field name="model">bzr.hr.employee</field>
+                <field name="arch" type="xml">
+                    <form string="员工">
+                        <field name="active"/>
+                        <field name="code"/>
+                        <field name="name"/>
+                        <field name="gender"/>
+                        <field name="user_id"/>
+                        <field name="company_id"/>
+                        <field name="sinid"/>
+                        <field name="identity_id"/>
+                        <field name="department_id"/>
+                        <field name="birthday"/>
+                        <field name="work_phone"/>
+                        <field name="mobile_phone"/>
+                        <field name="work_email"/>
+                        <field name="login"/>
+                        <field name="photo" widget="image"/>
+                        <newline/>
+                        <field name="manager_id" colspan="4"/>
+                        <field name="child_ids" colspan="4"/>
+                        <field name="type_ids" colspan="4" widget="many2many_tags" placeholder="类型..."/>
+                        <field name="notes" colspan="4"/>
+                    </form>
+                </field>
+            </record>
+            <record id="bzr_hr_employee_tree" model="ir.ui.view">
+                <field name="name">bzr.hr.employee.tree</field>
+                <field name="model">bzr.hr.employee</field>
+                <field name="arch" type="xml">
+                    <tree string="员工">
+                        <field name="name"/>
+                        <field name="code"/>
+                        <field name="active"/>
+                        <field name="company_id"/>
+                        <field name="user_id"/>
+                        <field name="birthday"/>
+                        <field name="sinid"/>
+                        <field name="identity_id"/>
+                        <field name="gender"/>
+                        <field name="department_id"/>
+                        <field name="work_phone"/>
+                        <field name="mobile_phone"/>
+                        <field name="work_email"/>
+                        <field name="photo"/>
+                        <field name="login"/>
+                        <field name="manager_id"/>
+                        <field name="notes"/>
+                    </tree>
+                </field>
+            </record>
+            <record id="bzr_hr_employee_search" model="ir.ui.view">
+                <field name="name">bzr.hr.employee.search</field>
+                <field name="model">bzr.hr.employee</field>
+                <field name="arch" type="xml">
+                    <search string="员工">
+                        <field name="name"/>
+                        <field name="code"/>
+                        <field name="active"/>
+                        <field name="company_id"/>
+                        <field name="user_id"/>
+                        <field name="birthday"/>
+                        <field name="sinid"/>
+                        <field name="identity_id"/>
+                        <field name="gender"/>
+                        <field name="department_id"/>
+                        <field name="work_phone"/>
+                        <field name="mobile_phone"/>
+                        <field name="work_email"/>
+                        <field name="photo"/>
+                        <field name="login"/>
+                        <field name="type_ids"/>
+                        <field name="manager_id"/>
+                        <field name="child_ids"/>
+                        <field name="notes"/>
+                    </search>
+                </field>
+            </record>
+            <!-- ============================= -->
+            <record id="action_bzr_hr_employee_tree" model="ir.actions.act_window">
+                <field name="name">员工</field>
+                <field name="res_model">bzr.hr.employee</field>
+                <field name="view_type">form</field>
+                <field name="view_mode">tree,form</field>
+                <field name="view_id" ref="bzr_hr_employee_tree"/>
+                <field name="search_view_id" ref="bzr_hr_employee_search"/>
+            </record>
+            <menuitem id="menu_action_bzr_hr_employee_tree" action="action_bzr_hr_employee_tree" parent="menu_bzr_hr_master"/>
+
+    </data>
+</openerp>
