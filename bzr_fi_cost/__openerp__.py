@@ -9,7 +9,7 @@
     'author': 'bzrerp team',
     'sequence': 2,
     'depends': [
-        'bzr_base','decimal_precision',
+        'bzr_base','decimal_precision','bzr_fi_gl',
     ],
     'data': ['bzr_fi_cost_document.xml',
              'bzr_fi_cost_master.xml',

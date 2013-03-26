@@ -54,6 +54,31 @@
          id="menu_fi_detail_ledger"
          parent="menu_fi_reporting"
          sequence="5"/>
-
+         
+    <!--Period report--> 
+    <record id="period_report_view" model="ir.ui.view">
+        <field name="name">period.report.form</field>
+        <field name="model">period.report</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="打印会计报表" version="7.0"> 
+               <group colspan="6" col="4" >
+                <field name="period_to"/>
+                <field name="report"/>
+                </group>
+                <footer>
+                <button icon="gtk-ok" name="print_report" string="打印报表" type="object"/>
+                <button icon="gtk-cancel" special="cancel" string="关闭"/>
+                </footer>
+            </form>
+        </field>
+     </record>
+     <act_window name="打印会计报表" res_model="period.report" view_mode="form" 
+                 src_model="fi.period" target="new" id="action_fi_period_report"/>
+     <menuitem        
+         action="action_fi_period_report"
+         id="menu_fi_period_report"
+         parent="menu_fi_reporting"
+         sequence="6"/>
     </data>
 </openerp>

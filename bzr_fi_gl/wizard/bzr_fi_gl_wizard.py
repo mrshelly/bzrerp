@@ -72,3 +72,30 @@ class general_ledger(osv.osv_memory):
         return {'acc_id': context.get('active_id', None),
                 'period_to':self.pool.get('fi.period').find(cr, uid, context=context),
                 }   
+
+class period_report(osv.osv_memory):
+    '''
+    根据期间输出 《资产负债表》《利润表》，现金流量表在bzr_fi_cash模块实现
+    每个期间一页，资产负债表输出年初余额和期末余额，利润表输出本期合计和本年累积
+    '''
+    _name = 'period.report'
+    _description = u'期末报表'
+    _columns = {
+        'period_to':fields.many2one('fi.period', u'截至期间', required=True),
+        'report':fields.selection([('balance.sheet',u'资产负债表'),('profit.loss',u'利润表')],u'报表格式',required=True),
+    }
+
+    def print_report(self, cr, uid, ids, context=None):
+        datas = {}
+        res = self.read(cr, uid, ids[0], ['report','period_to'], context=context)
+        datas['period_to'] = res['period_to'][0]
+        return {
+            'type':'ir.actions.report.xml',
+            'report_name':res['report'],
+            'datas':datas,
+        }
+    def default_get(self, cr, uid, fields, context=None):
+        return {
+                'period_to':self.pool.get('fi.period').find(cr, uid, context=context),
+                'report':'balance.sheet',
+                } 

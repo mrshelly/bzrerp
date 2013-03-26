@@ -115,15 +115,64 @@ class ledger_parser(report_sxw.rml_parse):
 
     def _get_direction(self, balance):
 
-        str = ''
+        dir_str = ''
         if balance == 0:
-            str = u'平'
+            dir_str = u'平'
         elif balance > 0:
-            str = u'借'
+            dir_str = u'借'
         else:
-            str = u'贷'
-        return str
+            dir_str = u'贷'
+        return dir_str
+    
+class report_parser(report_sxw.rml_parse):
 
+    def __init__(self, cr, uid, name, context):
+        super(report_parser, self).__init__(cr, uid, name, context)
+
+        self.localcontext.update( { 
+            '''
+            注册报表模板里可以访问的函数
+            '''
+            'time': time,
+            'lines':self._get_lines,
+            'period_name':self._priod_name,
+        })
+        self.context = context
+    
+    def set_context(self, objects, data, ids, report_type = None):
+        """
+        设置 OE context
+        """
+        self.data = data
+        super(report_parser, self).set_context(objects, data, ids, report_type)    
+        
+    def _priod_name(self):
+        obj_period = self.pool.get('fi.period')
+        res = obj_period.browse(self.cr,self.uid,self.data['period_to'],self.context).name
+        return res
+    def _get_lines(self,block='1',context=None):
+        #资产负债表和损益表取得的表行不同
+        lines = []    
+        obj_report = self.pool.get('fi.report')
+        # 中国的报表是一块一块儿组装的，我们这里分成三块
+        # 1-资产  （1 - 99）
+        # 2-负债和所有者权益 （101 - 199） 
+        # 3-收入和费用  （201 - 299）
+        # 4-现金流量表 （301 - 399）    
+        cond = []
+        if block == '1':
+            cond = [('sequence','>',0),('sequence','<',99)]
+        if block =='2':
+            cond = [('sequence','>',100),('sequence','<',199)]
+        if block=='3':
+            cond = [('sequence','>',200),('sequence','<',299)]
+        if block=='4':
+            cond = [('sequence','>',300),('sequence','<',399)]
+
+        line_ids = obj_report.search(self.cr, self.uid, cond,order='sequence')
+        for line in obj_report.browse(self.cr, self.uid, line_ids):
+            lines.append(line)
+        return lines
 #注册报表类
 
 #总帐
@@ -135,3 +184,13 @@ report_sxw.report_sxw('report.fi.general.ledger', 'fi.acc',
 report_sxw.report_sxw('report.fi.detail.ledger', 'fi.acc', 
                       'addons/bzr_fi_gl/report/detail_ledger.rml', 
                       parser=ledger_parser, header=False)
+
+#资产负债表
+report_sxw.report_sxw('report.balance.sheet', 'fi.period', 
+                      'addons/bzr_fi_gl/report/balance_sheet.rml', 
+                      parser=report_parser, header=False)
+
+#利润表
+report_sxw.report_sxw('report.profit.loss', 'fi.period', 
+                      'addons/bzr_fi_gl/report/profit_loss.rml', 
+                      parser=report_parser, header=False)
