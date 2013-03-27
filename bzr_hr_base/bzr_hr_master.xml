@@ -17,7 +17,6 @@
                         <newline/>
                         <field name="manager_id" colspan="4"/>
                         <field name="member_ids" colspan="4" widget="many2many_tags" placeholder="输入员工姓名..."/>
-                      
                     </form>
                 </field>
             </record>
