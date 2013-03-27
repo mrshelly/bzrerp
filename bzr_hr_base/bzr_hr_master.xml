@@ -17,7 +17,6 @@
                         <newline/>
                         <field name="manager_id" colspan="4"/>
                         <field name="member_ids" colspan="4" widget="many2many_tags" placeholder="输入员工姓名..."/>
-                        <field name="child_ids" colspan="4"/>
                     </form>
                 </field>
             </record>
@@ -30,8 +29,7 @@
                         <field name="company_id"/>
                         <field name="parent_id"/>
                         <field name="manager_id"/>
-                        <field name="child_ids"/>
-                        <field name="member_ids"/>
+                  
                     </tree>
                 </field>
             </record>
@@ -44,13 +42,12 @@
                         <field name="company_id"/>
                         <field name="parent_id"/>
                         <field name="manager_id"/>
-                        <field name="child_ids"/>
-                        <field name="member_ids"/>
+              
                     </search>
                 </field>
             </record>
             <!-- ============================= -->
-            <record id="action_bzr_hr_department_tree" model="ir.actions.act_window">
+            <record id="action_bzr_hr_department" model="ir.actions.act_window">
                 <field name="name">部门</field>
                 <field name="res_model">bzr.hr.department</field>
                 <field name="view_type">form</field>
@@ -58,7 +55,7 @@
                 <field name="view_id" ref="bzr_hr_department_tree"/>
                 <field name="search_view_id" ref="bzr_hr_department_search"/>
             </record>
-            <menuitem id="menu_action_bzr_hr_department_tree" action="action_bzr_hr_department_tree" parent="menu_bzr_hr_master"/>
+            <menuitem id="menu_bzr_hr_department" action="action_bzr_hr_department" parent="menu_bzr_hr_master"/>
 
         <!-- 员工 -->
             <record id="bzr_hr_employee_form" model="ir.ui.view">
@@ -83,7 +80,7 @@
                         <field name="photo" widget="image"/>
                         <newline/>
                         <field name="manager_id" colspan="4"/>
-                        <field name="child_ids" colspan="4"/>
+
                         <field name="type_ids" colspan="4" widget="many2many_tags" placeholder="类型..."/>
                         <field name="notes" colspan="4"/>
                     </form>
@@ -96,21 +93,18 @@
                     <tree string="员工">
                         <field name="name"/>
                         <field name="code"/>
-                        <field name="active"/>
+
                         <field name="company_id"/>
-                        <field name="user_id"/>
-                        <field name="birthday"/>
-                        <field name="sinid"/>
-                        <field name="identity_id"/>
+
                         <field name="gender"/>
                         <field name="department_id"/>
                         <field name="work_phone"/>
                         <field name="mobile_phone"/>
                         <field name="work_email"/>
-                        <field name="photo"/>
+
                         <field name="login"/>
                         <field name="manager_id"/>
-                        <field name="notes"/>
+
                     </tree>
                 </field>
             </record>
@@ -121,28 +115,23 @@
                     <search string="员工">
                         <field name="name"/>
                         <field name="code"/>
-                        <field name="active"/>
+
                         <field name="company_id"/>
-                        <field name="user_id"/>
-                        <field name="birthday"/>
                         <field name="sinid"/>
                         <field name="identity_id"/>
-                        <field name="gender"/>
                         <field name="department_id"/>
                         <field name="work_phone"/>
                         <field name="mobile_phone"/>
                         <field name="work_email"/>
-                        <field name="photo"/>
                         <field name="login"/>
                         <field name="type_ids"/>
-                        <field name="manager_id"/>
                         <field name="child_ids"/>
                         <field name="notes"/>
                     </search>
                 </field>
             </record>
             <!-- ============================= -->
-            <record id="action_bzr_hr_employee_tree" model="ir.actions.act_window">
+            <record id="action_bzr_hr_employee" model="ir.actions.act_window">
                 <field name="name">员工</field>
                 <field name="res_model">bzr.hr.employee</field>
                 <field name="view_type">form</field>
@@ -150,7 +139,7 @@
                 <field name="view_id" ref="bzr_hr_employee_tree"/>
                 <field name="search_view_id" ref="bzr_hr_employee_search"/>
             </record>
-            <menuitem id="menu_action_bzr_hr_employee_tree" action="action_bzr_hr_employee_tree" parent="menu_bzr_hr_master"/>
+            <menuitem id=">menu_bzr_hr_employee" action="action_bzr_hr_employee" parent="menu_bzr_hr_master"/>
 
     </data>
 </openerp>
