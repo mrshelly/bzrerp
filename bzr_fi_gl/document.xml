@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <!-- 主菜单-->
+        <menuitem
+                  id="menu_fi"
+                  name="会计"
+                  sequence="1"/>   
+        <menuitem
+                  id="menu_fi_document"
+                  name="业务数据"
+                  parent="menu_fi"
+                  sequence="2"/>
+
+        <!-- 会计凭证 -->    
+        <record id="form_fi_doc" model="ir.ui.view">
+            <field name="name">form.fi.doc</field>
+            <field name="model">fi.doc</field>
+            <field name="arch" type="xml">
+                <form string="会计凭证" version="7.0">
+                    <header>
+                        <button string="复核" type="object" name="button_approve"/>
+                        <button string="记账" type="object" name="button_post"/>
+                        <button string="重制" type="object" name="button_redo"/>
+                        <field name="state" widget="statusbar"/>    
+                    </header>
+                    <sheet string="会计凭证">
+                        <div align="center">
+                            <h1>记账凭证</h1>
+                        </div>
+                        <field name="needfix" placeholder="如审核时发现有问题，请写在这里。以便制单人据此修正..."/>
+                        <group col="4">
+                            <field name="company_id"/>
+                            <field name="date"/>
+                            <field name="period_id"/>
+                            <field name="type_id"/>
+                            <field name="number"/>
+                            <field name="ref_count"/>
+                        </group>
+                        <field name="line_ids">
+                            <tree>
+                                <field name="text"/>
+                                <field name="acc_id"/>
+                                <field name="debit"/>
+                                <field name="credit"/>
+                            </tree>
+                            <!-- TODO: 
+                            在tree里输入基本信息，在form里输入
+                            其他信息，如何切换？
+                            -->
+                            <form>
+                                <group col="4">
+                                    <field name="text"/>
+                                    <field name="acc_id"/>
+                                    <field name="debit"/>
+                                    <field name="credit"/> 
+                                </group>  
+                                <newline/>                             
+                                <field name="cost_ids" nolebel="1">
+                                    <tree>
+                                        <field name="co_obj"/>
+                                        <field name="debit"/>
+                                        <field name="credit"/>
+                                    </tree>
+                                    <form>
+                                        <field name="co_obj"/>
+                                        <field name="debit"/>
+                                        <field name="credit"/>
+                                        <field name="quantity"/>
+                                        <field name="price"/>
+                                        <field name="due"/>
+                                    </form>
+                                </field>
+                            </form>
+                        </field>
+                        <group>
+                            <field name="note"/>
+                            <field name="create_uid"/>
+                            <field name="approve_uid"/>
+                            <field name="post_uid"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="tree_fi_doc" model="ir.ui.view">
+            <field name="name">tree.fi.doc</field>
+            <field name="model">fi.doc</field>
+            <field name="arch" type="xml">
+                <tree string="会计凭证" colors="red:needfix">
+                    <field name="date"/>
+                    <field name="type_id"/>
+                    <field name="number"/>
+                    <field name="needfix"/>
+                </tree>
+            </field>
+        </record>
+        <record id="search_fi_doc" model="ir.ui.view">
+            <field name="name">search.fi.doc</field>
+            <field name="model">fi.doc</field>
+            <field name="arch" type="xml">
+                <search string="Search Move">
+                    <field name="number"/>
+                </search>
+            </field>
+        </record>
+        <record id="action_fi_doc" model="ir.actions.act_window">
+            <field name="name">会计凭证</field>
+            <field name="res_model">fi.doc</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="tree_fi_doc"/>
+            <field name="search_view_id" ref="search_fi_doc"/>            
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                点击新建会计凭证
+              </p><p>
+                会计凭证是会计模块的核心凭证
+              </p>              
+            </field>
+        </record>      
+           
+        <menuitem
+                      action="action_fi_doc"
+                      id="menu_fi_doc"
+                      parent="menu_fi_document"
+                      sequence="1"/>
+        
+    </data>
+</openerp>

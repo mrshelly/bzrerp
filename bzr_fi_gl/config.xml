@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <menuitem
+            id="menu_fi_config"
+            name="配置数据"
+            parent="menu_fi"
+            sequence="4"/>
+        <!-- 凭证字 -->
+        <record id="form_fi_doc_type" model="ir.ui.view">
+            <field name="name">form.fi.doc.type</field>
+            <field name="model">fi.doc.type</field>
+            <field name="arch" type="xml">
+                <form string="">
+                    <field name="name"/>
+                </form>
+            </field>
+        </record>
+        <record id="tree_fi_doc_type" model="ir.ui.view">
+            <field name="name">tree.fi.doc.type</field>
+            <field name="model">fi.doc.type</field>
+            <field name="arch" type="xml">
+                <tree string="凭证字">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        <record id="search_fi_doc_type" model="ir.ui.view">
+            <field name="name">search.fi.doc.type</field>
+            <field name="model">fi.doc.type</field>
+            <field name="arch" type="xml">
+                <search string="凭证字">
+                    <field name="name"/>
+                </search>
+            </field>
+        </record>
+        <record id="action_fi_doc_type" model="ir.actions.act_window">
+            <field name="name">凭证字</field>
+            <field name="res_model">fi.doc.type</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="tree_fi_doc_type"/>
+            <field name="search_view_id" ref="search_fi_doc_type"/>            
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                点击新建凭证字
+              </p><p>
+                凭证字用于对会计凭证进行分类
+              </p>
+            </field>
+        </record> 
+        <menuitem        
+            action="action_fi_doc_type"
+            id="menu_fi_doc_type"
+            parent="menu_fi_config"
+            sequence="1"/>
+        <!-- 科目类型 -->
+        <record id="form_fi_acc_type" model="ir.ui.view">
+            <field name="name">form.fi.acc.type</field>
+            <field name="model">fi.acc.type</field>
+            <field name="arch" type="xml">
+                <form string="科目类型">
+                    <field name="name"/>
+                </form>
+            </field>
+        </record>
+        <record id="tree_fi_acc_type" model="ir.ui.view">
+            <field name="name">tree.fi.acc.type</field>
+            <field name="model">fi.acc.type</field>
+            <field name="arch" type="xml">
+                <tree string="科目类型">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        <record id="search_fi_acc_type" model="ir.ui.view">
+            <field name="name">search.fi.acc.type</field>
+            <field name="model">fi.acc.type</field>
+            <field name="arch" type="xml">
+                <search string="科目类型">
+                    <field name="name"/>
+                </search>
+            </field>
+        </record>
+        <record id="action_fi_acc_type" model="ir.actions.act_window">
+            <field name="name">科目类型</field>
+            <field name="res_model">fi.acc.type</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="tree_fi_acc_type"/>
+            <field name="search_view_id" ref="search_fi_acc_type"/>            
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                点击新建科目类型
+              </p><p>
+                科目类型用于对会计科目进行分类
+                确定科目必须的辅助核算类别和账簿格式
+              </p>
+            </field>
+        </record> 
+        <menuitem        
+            action="action_fi_acc_type"
+            id="menu_fi_acc_type"
+            parent="menu_fi_config"
+            sequence="2"/>
+        <!-- 报表行 -->
+        <record id="form_fi_report" model="ir.ui.view">
+            <field name="name">form.fi.report</field>
+            <field name="model">fi.report</field>
+            <field name="arch" type="xml">
+                <form string="报表行">
+                    <field name="sequence"/>
+                    <field name="name"/>
+                    <field name="parent_id"/>
+                    <field name="children_ids"/>
+                </form>
+            </field>
+        </record>
+        <record id="tree_fi_report" model="ir.ui.view">
+            <field name="name">tree.fi.report</field>
+            <field name="model">fi.report</field>
+            <field name="arch" type="xml">
+                <tree string="报表行">
+                    <field name="sequence"/>
+                    <field name="name"/>
+                    <field name="parent_id"/>
+                    <field name="period_end"/>
+                </tree>
+            </field>
+        </record>
+        <record id="search_fi_report" model="ir.ui.view">
+            <field name="name">search.fi.report</field>
+            <field name="model">fi.report</field>
+            <field name="arch" type="xml">
+                <search string="报表行">
+                    <field name="sequence"/>
+                    <field name="name"/>
+                </search>
+            </field>
+        </record>
+        <record id="action_fi_report" model="ir.actions.act_window">
+            <field name="name">报表行</field>
+            <field name="res_model">fi.report</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="tree_fi_report"/>
+            <field name="search_view_id" ref="search_fi_report"/>            
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                点击新建报表行
+              </p><p>
+                报表行用于绘制资产负债表和损益表
+              </p>
+            </field>
+        </record> 
+        <menuitem        
+            action="action_fi_report"
+            id="menu_fi_report"
+            parent="menu_fi_config"
+            sequence="3"/>
+        <!-- 会计年度 -->
+        <record id="form_fi_year" model="ir.ui.view">
+            <field name="name">form.fi.year</field>
+            <field name="model">fi.year</field>
+            <field name="arch" type="xml">
+                <form string="会计年度">
+                    <field name="company_id"/>
+                    <field name="name"/>
+                    <field name="s_date"/>
+                    <field name="e_date"/> 
+                    <field name="period_ids"/>
+                    <button string="创建本年期间" name="create_period" type="object"/>
+                </form>
+            </field>
+        </record>
+        <record id="tree_fi_year" model="ir.ui.view">
+            <field name="name">tree.fi.year</field>
+            <field name="model">fi.year</field>
+            <field name="arch" type="xml">
+                <tree string="会计年度">
+                    <field name="company_id"/>
+                    <field name="name"/>
+                    <field name="s_date"/>
+                    <field name="e_date"/>                    
+                </tree>
+            </field>
+        </record>
+        <record id="search_fi_year" model="ir.ui.view">
+            <field name="name">search.fi.year</field>
+            <field name="model">fi.year</field>
+            <field name="arch" type="xml">
+                <search string="会计年度">
+                    <field name="name"/>
+                </search>
+            </field>
+        </record>
+        <record id="action_fi_year" model="ir.actions.act_window">
+            <field name="name">会计年度</field>
+            <field name="res_model">fi.year</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form,tree</field>
+            <field name="view_id" ref="tree_fi_year"/>
+            <field name="search_view_id" ref="search_fi_year"/>            
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                点击新建会计年度
+              </p><p>
+                会计年度是会计年结的核心主数据
+              </p>
+            </field>
+        </record> 
+        
+        <menuitem
+            action="action_fi_year"
+            id="menu_fi_year"
+            parent="menu_fi_config"
+            sequence="4"/>
+        
+    </data>
+</openerp>

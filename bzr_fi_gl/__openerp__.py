@@ -7,17 +7,17 @@
     'description': """
     总账模块包含凭证、账簿、报表、月结等基本功能
 """,
-    'author': 'bzrerp team',
+    'author': 'jeff@osbzr.com',
     'sequence': 2,
     'depends': [
         'bzr_base','decimal_precision',
     ],
-    'data': ['bzr_fi_gl_document.xml',
-             'bzr_fi_gl_master.xml',
-             'bzr_fi_gl_config.xml',
-             'data/bzr_fi_gl_data.xml',
-             'report/bzr_fi_gl_report.xml',
-             'wizard/bzr_fi_gl_wizard.xml',
+    'data': ['document.xml',
+             'master.xml',
+             'config.xml',
+             'data.xml',
+             'report/report.xml',
+             'wizard/wizard.xml',
     ],
     'demo': [
     ],

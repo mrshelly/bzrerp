@@ -6,17 +6,17 @@
     'description': """
     增加辅助核算项目和辅助核算凭证行
 """,
-    'author': 'bzrerp team',
+    'author': 'jeff@osbzr.com',
     'sequence': 2,
     'depends': [
         'bzr_base','decimal_precision','bzr_fi_gl',
     ],
-    'data': ['bzr_fi_cost_document.xml',
-             'bzr_fi_cost_master.xml',
-             'bzr_fi_cost_config.xml',
-             'data/bzr_fi_cost_data.xml',
-             'report/bzr_fi_cost_report.xml',
-             'wizard/bzr_fi_cost_wizard.xml',
+    'data': ['document.xml',
+             'master.xml',
+             'config.xml',
+             'data.xml',
+             'report/report.xml',
+             'wizard/wizard.xml',
     ],
     'demo': [
     ],
