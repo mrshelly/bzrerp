@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from report import report_sxw
+from openerp.report import report_sxw
 from openerp.osv import fields, osv
 import openerp.addons.decimal_precision as dp
 import time
