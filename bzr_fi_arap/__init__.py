@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
 #配置数据
-import bzr_fi_arap_config
+import config
 
 #主数据
-import bzr_fi_arap_master
+import master
 
 #业务数据
-import bzr_fi_arap_document
+import document

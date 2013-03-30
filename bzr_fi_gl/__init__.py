@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
 #配置数据
-import bzr_fi_gl_config
+import config
 
 #主数据
-import bzr_fi_gl_master
+import master
 
 #业务数据
-import bzr_fi_gl_document
+import document
 
 import report
 

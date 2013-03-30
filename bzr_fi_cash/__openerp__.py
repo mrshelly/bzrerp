@@ -6,17 +6,18 @@
     'description': """
     管理现金和银行存款等账目
 """,
-    'author': 'bzrerp team',
+    'author': 'jeff@osbzr.com',
     'sequence': 2,
     'depends': [
-        'bzr_base','decimal_precision',
+        'bzr_fi_gl',
+        'decimal_precision',
     ],
-    'data': ['bzr_fi_cash_document.xml',
-             'bzr_fi_cash_master.xml',
-             'bzr_fi_cash_config.xml',
-             'data/bzr_fi_cash_data.xml',
-             'report/bzr_fi_cash_report.xml',
-             'wizard/bzr_fi_cash_wizard.xml',
+    'data': ['document.xml',
+             'master.xml',
+             'config.xml',
+             'data.xml',
+             'report/report.xml',
+             'wizard/wizard.xml',
     ],
     'demo': [
     ],

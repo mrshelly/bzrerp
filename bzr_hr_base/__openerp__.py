@@ -6,18 +6,18 @@
     'description': """
 
 """,
-    'author': 'bzrerp team',
+    'author': 'mrshelly@gmail.com',
     'sequence': 100,
     'depends': [
         'bzr_base',
     ],
     'data': [
-        'bzr_hr_config.xml',
-        'bzr_hr_document.xml',
-        'bzr_hr_master.xml',
-        'data/bzr_hr_data.xml',
-        'report/bzr_hr_report.xml',
-        'wizard/bzr_hr_wizard.xml',
+        'config.xml',
+        'document.xml',
+        'master.xml',
+        'data.xml',
+        'report/report.xml',
+        'wizard/wizard.xml',
     ],
     'demo': [
     ],
