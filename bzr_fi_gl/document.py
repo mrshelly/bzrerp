@@ -11,6 +11,13 @@ class fi_doc(osv.osv):
     _name = 'fi.doc'
     _description = u'会计凭证'
     
+    def name_get(self,cr,uid,ids,context=None):
+        res = []
+        for d in self.browse(cr, uid, ids, context):
+            t = (d.id, d.period_id.name + d.type_id.name + d.number + '号')
+            res.append(t)
+        return res
+    
     def _amount_compute(self, cr, uid, ids, name, args, context, where =''):
         if not ids: return {}
         cr.execute( 'SELECT doc_id, SUM(debit) '\
@@ -21,7 +28,10 @@ class fi_doc(osv.osv):
         for id in ids:
             result.setdefault(id, 0.0)
         return result
-    
+    def _amount_big(self, cr, uid, ids, name, args, context, where =''):
+        ''' 大写金额合计 '''
+        pass
+        
     def _search_amount(self, cr, uid, obj, name, args, context):
         ids = set()
         for cond in args:
@@ -51,21 +61,23 @@ class fi_doc(osv.osv):
         'date':fields.date(u'凭证日期',required=True,),
 #会计期间
         'period_id':fields.many2one('fi.period',u'期间',required=True,
-                    states={'posted':[('readonly',True)]}),        
+                    domain=[('state','!=','closed')]),        
 #凭证字
         'type_id':fields.many2one('fi.doc.type','凭证字',required=True,
                   help=u'可在配置中自定义'),
 #凭证号
-        'number':fields.char(u'凭证编号',size=64,
-                 help=u'由系统自动生成，结帐前可重排'),
+        'number':fields.char(u'编号',size=64),
 #附单据数
-        'ref_count':fields.integer(u'附单据数',help=u'凭证后附原始凭证的页数'),
+        'ref_count':fields.integer(u'附件数',help=u'凭证后附原始凭证的页数'),
 #凭证行
         'line_ids':fields.one2many('fi.doc.line','doc_id',u'凭证行',
         states={'posted':[('readonly',True)]},help=u'过账后不可修改'),
+#金额合计
         'amount': fields.function(_amount_compute, string=u'金额', 
                   digits_compute=dp.get_precision('Account'), 
                   type='float', fnct_search=_search_amount),
+#大写金额
+#        'big':fields.function(_amount_big, string=u'金额', type='char',size='128'),
 #状态
         'state':fields.selection(get_states('fi.doc'),u'状态',required=True, 
         readonly=True,
@@ -74,20 +86,22 @@ class fi_doc(osv.osv):
         'note':fields.text(u'备注'),
 #修正意见
         'needfix':fields.char(u'修正意见',size=128,
-                  help=u'审核人发现的问题在这里描述，制单人修正后清空此字段'),
+                  help=u'复核人发现的问题在这里描述，制单人修正后清空此字段'),
 #制单
         'create_uid':fields.many2one('res.users',u'制单',
         help=u'凭证制单人'),
-#审核
-        'approve_uid':fields.many2one('res.users',u'审核',
-        help=u'凭证审核人'),
+#复核
+        'approve_uid':fields.many2one('res.users',u'复核',
+        help=u'凭证复核人'),
 #登账
         'post_uid':fields.many2one('res.users',u'记账',
         help=u'凭证登帐人'),
     }
     _defaults = {
+        'type_id':1,
         'number': '/',
         'state': 'draft',
+        'ref_count':1,
         'period_id': lambda self, cr, uid, c: \
             self.pool.get('fi.period').find(cr,uid),
 
@@ -138,7 +152,7 @@ class fi_doc_line(osv.osv):
     _description = u'会计凭证行'
     _columns = {
 #会计凭证
-        'doc_id':fields.many2one('fi.doc',u'会计凭证',required=True),
+        'doc_id':fields.many2one('fi.doc',u'会计凭证',required=True, ondelete='cascade'),
 #摘要
         'text':fields.char(u'摘要',size=64,help=u'凭证行的摘要',required=True),
 #会计科目

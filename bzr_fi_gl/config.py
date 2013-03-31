@@ -33,8 +33,9 @@ class fi_report(osv.osv):
 
     
     _columns={
-        'name':fields.char(u'文本',size=128,required=True,translate=True),
-        'sequence':fields.integer(u'行号'),
+        'name':fields.char(u'文本',size=128),
+        'line':fields.char(u'行号',size=4),
+        'type':fields.selection([('1','资产负债表（资产）'),('2','资产负债表（负债和权益）'),('3','利润表'),('4','现金流量表')],string="所属报表"),
         'parent_id':fields.many2one('fi.report', u'上级'),
         'account_ids':fields.one2many('fi.acc','report_id',u'科目'),
         'children_ids':fields.one2many('fi.report','parent_id',u'下级'), 

@@ -5,14 +5,14 @@
             id="menu_fi_reporting"
             name="查询报表"
             parent="menu_fi"
-            sequence="1"/>
+            sequence="2"/>
         <record id="fi_report_tree" model="ir.ui.view">
             <field name="name">会计报表</field>
             <field name="model">fi.report</field>
             <field name="field_parent">children_ids</field>
             <field name="arch" type="xml">
                 <tree string="会计报表" toolbar="1" >
-                    <field name="sequence"/>
+                    <field name="line"/>
                     <field name="name"/>
                     <field name="parent_id" invisible="1"/>
                     <field name="period_start"/>

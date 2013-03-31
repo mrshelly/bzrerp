@@ -2,7 +2,7 @@
 
 <!-- 会计凭证的状态 
 
-草稿 已审核 已记账
+草稿 已复核 已记账
 
 -->
 <openerp>
@@ -17,7 +17,7 @@
     <field name="object">fi.doc</field>
     <field name="seq">20</field>
     <field name="key">approved</field>
-    <field name="name">已审核</field>
+    <field name="name">已复核</field>
 </record>
 <record id="state_fi_doc_30" model="bzr.state">
     <field name="object">fi.doc</field>

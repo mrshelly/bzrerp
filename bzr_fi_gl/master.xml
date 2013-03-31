@@ -31,14 +31,7 @@
                 <tree string="会计科目">
                     <field name="code"/>
                     <field name="name"/>
-                    <field name="year_start"/>
-                    <field name="year_debit"/>
-                    <field name="year_credit"/>                   
-                    <field name="period_start"/>
-                    <field name="period_debit"/>
-                    <field name="period_credit"/>
-                    <field name="period_end"/>
-                    
+                    <field name="period_end"/>             
                 </tree>
             </field>
         </record>
@@ -80,10 +73,6 @@
             <field name="model">fi.period</field>
             <field name="arch" type="xml">
                 <form string="会计期间" version="7.0">
-                    <header>
-                        <button string="月结" name="close" states="draft" type="object"/>
-                        <field name="state" widget="statusbar"/>    
-                    </header>
                     <sheet string="会计期间">
                         <group>
                         <field name="company_id"/>
@@ -94,6 +83,10 @@
                         <field name="e_date"/> 
                         </group>
                     </sheet>
+                    <header>
+                        <button string="结账" name="close" class="oe_highlight" states="draft" type="object"/>
+                        <field name="state" widget="statusbar"/>    
+                    </header>
                 </form>
             </field>
         </record>
@@ -104,7 +97,8 @@
                 <tree string="会计期间" create="false" delete="false">
                     <field name="name"/>
                     <field name="s_date"/>
-                    <field name="e_date"/>                    
+                    <field name="e_date"/>
+                    <field name="state"/>                    
                 </tree>
             </field>
         </record>
@@ -121,14 +115,13 @@
             <field name="name">会计期间</field>
             <field name="res_model">fi.period</field>
             <field name="view_type">form</field>
-            <field name="view_mode">form,tree</field>
-            <field name="view_id" ref="tree_fi_period"/>
+            <field name="view_mode">tree,form</field>
             <field name="search_view_id" ref="search_fi_period"/>            
             <field name="help" type="html">
               <p class="oe_view_nocontent_create">
                 点击新建会计期间
               </p><p>
-                会计科目是会计月结的核心主数据
+                会计期间是会计月结的核心主数据
               </p>
             </field>
         </record> 
