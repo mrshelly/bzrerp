@@ -36,6 +36,7 @@ class detail_ledger(osv.osv_memory):
         datas['ids']=[res['acc_id'][0],]
         datas['period_to'] = res['period_to'][0]
         datas['period_from'] = res['period_from'][0]
+        datas['cost_obj'] = res['co_obj']
         return {
                 'type':'ir.actions.report.xml',
                 'report_name':acc.format,
