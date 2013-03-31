@@ -13,7 +13,28 @@ class fi_acc(osv.osv):
     _name='fi.acc'
     _description=u'会计科目'
     
+    def name_get(self,cr,uid,ids,context=None):
+        ''' 显示科目时显示科目编号和科目名称，用空格分隔 '''
+        res = []
+        for a in self.browse(cr, uid, ids, context):
+            t = (a.id, a.code + ' '+ a.name)
+            res.append(t)
+        return res
+    
+    def name_search(self, cr, user, name, args=None, operator='ilike', context=None, limit=100):
+        '''可以按科目编号或者科目名称查找科目'''
+        if context is None:
+            context = {}
+        ids = []
+        if name:
+            ids = self.search(cr, user, [('code', 'ilike', name)], context=context)
+        if not ids:
+            ids = self.search(cr, user, [('name', 'ilike', name)], context=context)
+
+        return self.name_get(cr, user, ids, context=context)
+    
     def __compute(self, cr, uid, ids, field_name, arg, context=None):
+        '''计算科目的余额和发生额'''
         result={}
         period=self.pool.get('fi.period').find(cr,uid,
                   fields.date.context_today(self,cr,uid),context)

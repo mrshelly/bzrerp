@@ -50,7 +50,7 @@
           <para>[[line.name]]</para>
         </td>
         <td>
-          <para>[[line.sequence - 200]]</para>
+          <para>[[line.line]]</para>
         </td>
         <td>
           <para>[[line.period_debit - line.period_credit]]</para>

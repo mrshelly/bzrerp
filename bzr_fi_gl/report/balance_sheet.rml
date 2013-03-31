@@ -64,6 +64,8 @@
     </blockTable>
     </td>
     </tr>
+    </blockTable>
+    <blockTable colWidths="340.0,340.0">
     <tr>
     <td>
     <section>
@@ -74,7 +76,7 @@
           <para>[[line.name]]</para>
         </td>
         <td>
-          <para>[[line.sequence]]</para>
+          <para>[[line.line]]</para>
         </td>
         <td>
           <para>[[line.year_start]]</para>
@@ -95,7 +97,7 @@
           <para>[[line.name]]</para>
         </td>
         <td>
-          <para>[[line.sequence]]</para>
+          <para>[[line.line]]</para>
         </td>
         <td>
           <para>[[line.year_start]]</para>

@@ -151,25 +151,11 @@ class report_parser(report_sxw.rml_parse):
         res = obj_period.browse(self.cr,self.uid,self.data['period_to'],self.context).name
         return res
     def _get_lines(self,block='1',context=None):
-        #资产负债表和损益表取得的表行不同
+
         lines = []    
         obj_report = self.pool.get('fi.report')
-        # 中国的报表是一块一块儿组装的，我们这里分成三块
-        # 1-资产  （1 - 99）
-        # 2-负债和所有者权益 （101 - 199） 
-        # 3-收入和费用  （201 - 299）
-        # 4-现金流量表 （301 - 399）    
-        cond = []
-        if block == '1':
-            cond = [('sequence','>',0),('sequence','<',99)]
-        if block =='2':
-            cond = [('sequence','>',100),('sequence','<',199)]
-        if block=='3':
-            cond = [('sequence','>',200),('sequence','<',299)]
-        if block=='4':
-            cond = [('sequence','>',300),('sequence','<',399)]
 
-        line_ids = obj_report.search(self.cr, self.uid, cond,order='sequence')
+        line_ids = obj_report.search(self.cr, self.uid, [('type','=',block)],order='line')
         for line in obj_report.browse(self.cr, self.uid, line_ids):
             lines.append(line)
         return lines
