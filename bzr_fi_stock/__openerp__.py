@@ -6,17 +6,17 @@
     'description': """
     材料账
 """,
-    'author': 'bzrerp team',
+    'author': 'jeff@osbzr.com',
     'sequence': 2,
     'depends': [
         'bzr_base','decimal_precision',
     ],
-    'data': ['bzr_fi_stock_document.xml',
-             'bzr_fi_stock_master.xml',
-             'bzr_fi_stock_config.xml',
-             'data/bzr_fi_stock_data.xml',
-             'report/bzr_fi_stock_report.xml',
-             'wizard/bzr_fi_stock_wizard.xml',
+    'data': ['document.xml',
+             'master.xml',
+             'config.xml',
+             'data.xml',
+             'report/report.xml',
+             'wizard/wizard.xml',
     ],
     'demo': [
     ],

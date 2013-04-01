@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+<document filename="test.pdf">
+  <template pageSize="(842.0,595.0)" title="Test" author="jeff@osbzr.com" allowSplitting="20">
+    <pageTemplate id="first">
+      <frame id="first" x1="28.0" y1="28.0" width="786" height="539"/>
+    </pageTemplate>
+  </template>
+  <stylesheet>
+      <blockTableStyle id="col4_table">
+      <blockValign value="TOP"/>
+      <lineStyle kind="LINEBEFORE" colorName="#008000" start="0,0" stop="4,4"/>
+      <lineStyle kind="LINEABOVE" colorName="#008000" start="0,0" stop="4,4"/>
+      <lineStyle kind="LINEBELOW" colorName="#008000" start="0,0" stop="4,4"/>
+      <lineStyle kind="LINEAFTER" colorName="#008000" start="0,0" stop="4,4"/>
+    </blockTableStyle>
+  </stylesheet>
+  <story>
+    <para>资产负债表</para>
+    <blockTable colWidths="269.0,269.0">
+      <tr>
+        <td><para></para></td>
+        <td><para></para></td>
+      </tr>
+      <tr>
+       <td><para> [[ period_name() ]]</para></td>
+      </tr>
+    </blockTable>
+    <blockTable colWidths="340.0,340.0">
+    <tr>
+    <td>
+    <blockTable colWidths="100.0,40.0,100.0,100.0" style="col4_table">
+      <tr>
+        <td>
+          <para>文本</para>
+        </td>
+        <td>
+          <para>行号</para>
+        </td>
+        <td>
+          <para>年初余额</para>
+        </td>
+        <td>
+          <para>期末余额</para>
+        </td>
+      </tr>
+    </blockTable>
+    </td>
+    <td>
+    <blockTable colWidths="100.0,40.0,100.0,100.0" style="col4_table">
+      <tr>
+        <td>
+          <para>文本</para>
+        </td>
+        <td>
+          <para>行号</para>
+        </td>
+        <td>
+          <para>年初余额</para>
+        </td>
+        <td>
+          <para>期末余额</para>
+        </td>
+      </tr>
+    </blockTable>
+    </td>
+    </tr>
+    </blockTable>
+    <blockTable colWidths="340.0,340.0">
+    <tr>
+    <td>
+    <section>
+    <blockTable colWidths="100.0,40.0,100.0,100.0" style="col4_table">
+       <para>[[repeatIn(lines('1'),'line')]]</para>
+          <tr>
+        <td>
+          <para>[[line.name]]</para>
+        </td>
+        <td>
+          <para>[[line.line]]</para>
+        </td>
+        <td>
+          <para>[[line.year_start]]</para>
+        </td>
+        <td>
+          <para>[[line.period_end]]</para>
+        </td>          
+          </tr>
+        </blockTable>
+      </section>
+      </td>
+    <td>
+    <section>
+    <blockTable colWidths="100.0,40.0,100.0,100.0" style="col4_table">
+       <para>[[repeatIn(lines('2'),'line')]]</para>
+          <tr>
+        <td>
+          <para>[[line.name]]</para>
+        </td>
+        <td>
+          <para>[[line.line]]</para>
+        </td>
+        <td>
+          <para>[[line.year_start]]</para>
+        </td>
+        <td>
+          <para>[[line.period_end]]</para>
+        </td>          
+          </tr>
+        </blockTable>
+      </section>
+      </td>      
+      </tr>
+      </blockTable>
+  </story>
+</document>
