@@ -16,6 +16,7 @@
                     <field name="code"/>
                     <field name="name"/>
                     <field name="type"/>
+                    <field name="format"/>
                     <field name="parent_id"/>
                     <field name="report_id"/>
                     <field name="reverse"/>

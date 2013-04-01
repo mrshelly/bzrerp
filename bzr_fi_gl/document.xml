@@ -34,7 +34,7 @@
                         </group>
                         
                         <field name="line_ids">
-                            <tree editable="bottom" colors="red:debit&lt;0;red:credit&lt;0">
+                            <tree colors="red:debit&lt;0;red:credit&lt;0">
                                 <field name="text"/>
                                 <field name="acc_id"/>
                                 <field name="debit" sum="合计"/>

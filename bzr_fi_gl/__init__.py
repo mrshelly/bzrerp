@@ -12,3 +12,5 @@ import document
 import report
 
 import wizard
+
+ledger_parser = report.ledger_parser
