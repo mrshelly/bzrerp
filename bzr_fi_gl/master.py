@@ -46,8 +46,8 @@ class fi_acc(osv.osv):
     _columns={
         'company_id': fields.many2one('res.company', 'Company', 
                       required=True, select=1),
-        'code':fields.char(u'编号',size=64),
-        'name':fields.char(u'名称',size=64),
+        'code':fields.char(u'编号',size=64,required=True),
+        'name':fields.char(u'名称',size=64,required=True),
         'type':fields.many2one('fi.acc.type',u'类型',size=64),
         'parent_id': fields.many2one('fi.acc',u'上级科目',ondelete='cascade'),
         'child_ids': fields.one2many('fi.acc','parent_id',u'下级科目'),
