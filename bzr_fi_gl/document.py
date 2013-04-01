@@ -220,15 +220,3 @@ class fi_doc_line_cost(osv.osv):
         'period_id': lambda self,cr,uid,c: c.get('period_id', False),
         'acc_id': lambda self,cr,uid,c: c.get('acc_id', False),
     }
-
-    def create(self, cr, uid, data, context=None):
-        '''在创建记录时，凭证行还未保存，无法获取related的字段值（两级related可以，三级就不行了）
-                             暂时在创建时写入，但问题是凭证的科目和期间变化不会写入成本行
-        '''
-        #FIXME: 改成function字段并在修改时更新
-        obj_line=self.pool.get('fi.doc.line')
-        line = obj_line.browse(cr,uid,data['line_id'],context)
-        data['period_id'] = line.doc_id.period_id.id
-        data['acc_id'] = line.acc_id.id
-        line_cost_id = super(fi_doc_line_cost, self).create(cr, uid, data, context=context)
-        return line_cost_id
