@@ -5,14 +5,14 @@
         <menuitem
                   id="menu_fi"
                   name="会计"
-                  sequence="1"/>   
+                  sequence="1"/>
         <menuitem
                   id="menu_fi_document"
                   name="业务数据"
                   parent="menu_fi"
                   sequence="1"/>
 
-        <!-- 会计凭证 -->    
+        <!-- 会计凭证 -->
         <record id="form_fi_doc" model="ir.ui.view">
             <field name="name">form.fi.doc</field>
             <field name="model">fi.doc</field>
@@ -22,25 +22,25 @@
                         <div align="center">
                             <h1>记账凭证</h1>
                         </div>
-                        
+
                         <group col="6">
                             <field name="type_id" widget="selection" nolabel="1"/>
                             <field name="number" nolabel="1"/>
                             <field name="company_id" colspan="4"/>
-                            <newline/>                        	
+                            <newline/>
                             <field name="date"/>
                             <field name="period_id"/>
                             <field name="ref_count"/>
                         </group>
-                        
-                        <field name="line_ids">
+
+                        <field name="line_ids" context="{'period_id': period_id}">
                             <tree colors="red:debit&lt;0;red:credit&lt;0">
                                 <field name="text"/>
                                 <field name="acc_id"/>
                                 <field name="debit" sum="合计"/>
                                 <field name="credit" sum="合计"/>
                             </tree>
-                            <!-- TODO: 
+                            <!-- TODO:
                             在tree里输入基本信息，在form里输入
                             其他信息，如何切换？
                             -->
@@ -49,10 +49,10 @@
                                     <field name="text"/>
                                     <field name="acc_id"/>
                                     <field name="debit"/>
-                                    <field name="credit"/> 
-                                </group>  
-                                <newline/>                             
-                                <field name="cost_ids" nolebel="1">
+                                    <field name="credit"/>
+                                </group>
+                                <newline/>
+                                <field name="cost_ids" nolebel="1" context="{'period_id': parent.period_id, 'acc_id': acc_id}">
                                     <tree>
                                         <field name="co_obj"/>
                                         <field name="debit"/>
@@ -78,11 +78,11 @@
                         </group>
                         <field name="needfix" placeholder="如复核时发现有问题，请写在这里。以便制单人据此修正..."/>
                     </sheet>
-                    <header> 
+                    <header>
                         <button string="复核" type="object" name="button_approve" class="oe_highlight" states="draft"/>
                         <button string="记账" type="object" name="button_post" class="oe_highlight" states="approved"/>
                         <button string="重制" type="object" name="button_redo" states="approved,posted"/>
-                        <field name="state" widget="statusbar"/>                         
+                        <field name="state" widget="statusbar"/>
                     </header>
                 </form>
             </field>
@@ -115,21 +115,21 @@
             <field name="res_model">fi.doc</field>
             <field name="view_type">form</field>
             <field name="view_mode">form,tree</field>
-            <field name="search_view_id" ref="search_fi_doc"/>            
+            <field name="search_view_id" ref="search_fi_doc"/>
             <field name="help" type="html">
               <p class="oe_view_nocontent_create">
                 点击新建会计凭证
               </p><p>
                 会计凭证是会计模块的核心凭证
-              </p>              
+              </p>
             </field>
-        </record>      
-           
+        </record>
+
         <menuitem
                       action="action_fi_doc"
                       id="menu_fi_doc"
                       parent="menu_fi_document"
                       sequence="1"/>
-        
+
     </data>
 </openerp>

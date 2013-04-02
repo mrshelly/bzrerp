@@ -10,14 +10,14 @@ import openerp.addons.decimal_precision as dp
 class fi_doc(osv.osv):
     _name = 'fi.doc'
     _description = u'会计凭证'
-    
+
     def name_get(self,cr,uid,ids,context=None):
         res = []
         for d in self.browse(cr, uid, ids, context):
-            t = (d.id, d.period_id.name + d.type_id.name + d.number + '号')
+            t = (d.id, d.period_id.name + d.type_id.name + d.number + u'号')
             res.append(t)
         return res
-    
+
     def _amount_compute(self, cr, uid, ids, name, args, context, where =''):
         if not ids: return {}
         cr.execute( 'SELECT doc_id, SUM(debit) '\
@@ -31,7 +31,7 @@ class fi_doc(osv.osv):
     def _amount_big(self, cr, uid, ids, name, args, context, where =''):
         ''' 大写金额合计 '''
         pass
-        
+
     def _search_amount(self, cr, uid, obj, name, args, context):
         ids = set()
         for cond in args:
@@ -45,7 +45,7 @@ class fi_doc(osv.osv):
                 if cond[1] in ['=like', 'like', 'not like', \
                     'ilike', 'not ilike', 'in', 'not in', 'child_of']:
                     continue
-    
+
             cr.execute('select doc_id from fi_doc_line group by doc_id ' \
                        'having sum(debit) %s %%s' % (cond[1]),(amount,))
             res_ids = set(id[0] for id in cr.fetchall())
@@ -53,15 +53,15 @@ class fi_doc(osv.osv):
         if ids:
             return [('id', 'in', tuple(ids))]
         return [('id', '=', '0')]
-    
+
     _columns = {
-        'company_id': fields.many2one('res.company', u'公司', 
+        'company_id': fields.many2one('res.company', u'公司',
                       required=True, select=1),
 #凭证日期
         'date':fields.date(u'凭证日期',required=True,),
 #会计期间
         'period_id':fields.many2one('fi.period',u'期间',required=True,
-                    domain=[('state','!=','closed')]),        
+                    domain=[('state','!=','closed')]),
 #凭证字
         'type_id':fields.many2one('fi.doc.type','凭证字',required=True,
                   help=u'可在配置中自定义'),
@@ -73,13 +73,13 @@ class fi_doc(osv.osv):
         'line_ids':fields.one2many('fi.doc.line','doc_id',u'凭证行',
         states={'posted':[('readonly',True)]},help=u'过账后不可修改'),
 #金额合计
-        'amount': fields.function(_amount_compute, string=u'金额', 
-                  digits_compute=dp.get_precision('Account'), 
+        'amount': fields.function(_amount_compute, string=u'金额',
+                  digits_compute=dp.get_precision('Account'),
                   type='float', fnct_search=_search_amount),
 #大写金额
 #        'big':fields.function(_amount_big, string=u'金额', type='char',size='128'),
 #状态
-        'state':fields.selection(get_states('fi.doc'),u'状态',required=True, 
+        'state':fields.selection(get_states('fi.doc'),u'状态',required=True,
         readonly=True,
         help=u'控制会计凭证工作流'),
 #备注
@@ -118,7 +118,7 @@ class fi_doc(osv.osv):
 # 审批拒绝
     def button_redo(self, cursor, user, ids, context=None):
         return self.redo(cursor, user, ids, context=context)
-# 批量登帐            
+# 批量登帐
     def post(self, cr, uid, ids, context=None):
         if context is None:
             context = {}
@@ -134,7 +134,7 @@ class fi_doc(osv.osv):
         if context is None:
             context = {}
         self.write(cr,uid,ids,{'state':'draft','approve_uid':None,'post_uid':None})
-        return True 
+        return True
     def copy(self, cr, uid, id, default=None, context=None):
         default = {} if default is None else default.copy()
         context = {} if context is None else context.copy()
@@ -146,7 +146,16 @@ class fi_doc(osv.osv):
             'copy':True
         })
         return super(fi_doc, self).copy(cr, uid, id, default, context)
-            
+
+    def write(self, cr, uid, ids, vals, context=None):
+        ret = super(fi_doc, self).write(cr, uid, ids, vals, context=context)
+        if 'period_id' in vals or 'line_ids' in vals:
+            res = self.browse(cr, uid, isinstance(ids, (int,long)) and [ids] or ids, context=context)
+            for r in res:
+                self.pool.get('fi.doc.line').write(cr, uid, [cc.id for cc in r.line_ids], {}, context=context)
+                self.pool.get('fi.doc.line.cost').write(cr, uid, [lc.id for l in [ccc.cost_ids for ccc in r.line_ids] for lc in l], {}, context=context)
+        return ret
+
 class fi_doc_line(osv.osv):
     _name = 'fi.doc.line'
     _description = u'会计凭证行'
@@ -159,21 +168,32 @@ class fi_doc_line(osv.osv):
         'acc_id':fields.many2one('fi.acc',u'会计科目',help=u'只能选择末级科目',required=True,domain=[('child_ids','=',False)]),
 #借方
 #TODO 这里这个'Account'能否使用当前class的name？
-        'debit': fields.float(u'借方',help=u'以公司本位币计的金额', 
+        'debit': fields.float(u'借方',help=u'以公司本位币计的金额',
         digits_compute=dp.get_precision('Account')),
 #贷方
         'credit': fields.float(u'贷方',help=u'以公司本位币计的金额',
-        digits_compute=dp.get_precision('Account')),        
+        digits_compute=dp.get_precision('Account')),
 
 #辅助核算行
         'cost_ids':fields.one2many('fi.doc.line.cost','line_id',u'辅助核算行'),
 
 # 从凭证上复制一些字段过来
 #TODO 复制凭证时这个字段的值会带入新凭证，即使新凭证的期间值改了也不更新这里，注意
-        'period_id':fields.related('doc_id','period_id',type='many2one', 
+        'period_id':fields.related('doc_id','period_id',type='many2one',
           relation='fi.period', string='期间', store=True, readonly=True),
     }
 
+    _defaults = {
+        'period_id': lambda self,cr,uid,c: c.get('period_id', False)
+    }
+
+    def write(self, cr, uid, ids, vals, context=None):
+        ret = super(fi_doc_line, self).write(cr, uid, ids, vals, context=context)
+        if 'acc_id' in vals or 'cost_ids' in vals:
+            res = self.browse(cr, uid, isinstance(ids, (int,long)) and [ids] or ids, context=context)
+            for r in res:
+                self.pool.get('fi.doc.line.cost').write(cr, uid, [lc.id for lc in r.cost_ids], {}, context=context)
+        return ret
 
 class fi_doc_line_cost(osv.osv):
     def _get_co(self,cr,uid,context=None):
@@ -189,11 +209,11 @@ class fi_doc_line_cost(osv.osv):
         'co_obj':fields.reference(u'辅助核算项目',selection=_get_co,size=128),
 #借方
 #TODO 这里这个'Account'能否使用当前class的name？
-        'debit': fields.float(u'借方',help=u'以公司本位币计的金额', 
+        'debit': fields.float(u'借方',help=u'以公司本位币计的金额',
         digits_compute=dp.get_precision('Account')),
 #贷方
         'credit': fields.float(u'贷方',help=u'以公司本位币计的金额',
-        digits_compute=dp.get_precision('Account')),  
+        digits_compute=dp.get_precision('Account')),
 #产品相关
 #数量
         'quantity':fields.float(u'数量',
@@ -204,20 +224,15 @@ class fi_doc_line_cost(osv.osv):
 #业务伙伴相关
 #到期日
         'due':fields.date(u'到期日',help=u'往来欠款到期日，用于计算账龄'),
-        
-        'period_id':fields.related('line_id','period_id',type='many2one', 
+
+        'period_id':fields.related('line_id','period_id',type='many2one',
           relation='fi.period', string='期间', store=True),
         'acc_id':fields.related('line_id','acc_id',type='many2one',
           relation='fi.acc',string='科目',store=True)
     }
-    def create(self, cr, uid, data, context=None):
-        '''在创建记录时，凭证行还未保存，无法获取related的字段值（两级related可以，三级就不行了）
-                             暂时在创建时写入，但问题是凭证的科目和期间变化不会写入成本行
-        '''
-        #FIXME: 改成function字段并在修改时更新
-        obj_line=self.pool.get('fi.doc.line')
-        line = obj_line.browse(cr,uid,data['line_id'],context)
-        data['period_id'] = line.doc_id.period_id.id
-        data['acc_id'] = line.acc_id.id
-        line_cost_id = super(fi_doc_line_cost, self).create(cr, uid, data, context=context)
-        return line_cost_id
+
+
+    _defaults = {
+        'period_id': lambda self,cr,uid,c: c.get('period_id', False),
+        'acc_id': lambda self,cr,uid,c: c.get('acc_id', False),
+    }
