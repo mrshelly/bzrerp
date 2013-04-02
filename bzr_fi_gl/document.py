@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from openerp.osv import fields, osv
+from openerp.tools import float_compare
 from openerp.addons.bzr_base import get_states
 import openerp.addons.decimal_precision as dp
 #会计凭证   fi.doc
@@ -109,6 +110,24 @@ class fi_doc(osv.osv):
         'company_id': lambda self, cr, uid, c: \
             self.pool.get('res.users').browse(cr, uid, uid, c).company_id.id,
     }
+    def check_balance(self,cr,uid,id,context=None):
+        res = False
+        debit = credit = 0.0
+        lines = self.browse(cr, uid, id, context).line_ids
+        if lines:
+            for l in lines:
+                debit += l.debit
+                credit += l.credit
+            if float_compare(debit,credit,precision_digits=2):
+                res = True
+        return res
+    def new_number(self,cr,uid,id,context=None):
+        '''按期间和凭证字编号'''
+        me = self.browse(cr, uid, id, context)
+        arg = [('period_id','=',me.period_id),('type_id','=',me.type_id),('state','!=','draft')]
+        res = self.search_count(cr, uid, arg, context) + 1
+        self.write(cr, uid, [id], {'number':res}, context)
+        return res
 # 审批按钮
     def button_approve(self, cursor, user, ids, context=None):
         return self.approve(cursor, user, ids, context=context)

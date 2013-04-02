@@ -32,6 +32,9 @@
                 <tree string="会计科目">
                     <field name="code"/>
                     <field name="name"/>
+                    <field name="period_start"/>
+                    <field name="period_debit"/>
+                    <field name="period_credit"/>
                     <field name="period_end"/>             
                 </tree>
             </field>

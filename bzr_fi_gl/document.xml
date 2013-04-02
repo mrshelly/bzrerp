@@ -40,19 +40,15 @@
                                 <field name="debit" sum="合计"/>
                                 <field name="credit" sum="合计"/>
                             </tree>
-                            <!-- TODO:
-                            在tree里输入基本信息，在form里输入
-                            其他信息，如何切换？
-                            -->
                             <form>
-                                <group col="4">
-                                    <field name="text"/>
+                                <group col="6">
+                                    <field name="text" colspan='6'/>
+                                    <newline/>
                                     <field name="acc_id"/>
                                     <field name="debit"/>
                                     <field name="credit"/>
-                                </group>
-                                <newline/>
-                                <field name="cost_ids" nolebel="1" context="{'period_id': parent.period_id, 'acc_id': acc_id}">
+                                    <newline/>
+                                  <field name="cost_ids" nolabel="1" colspan='6' context="{'period_id': parent.period_id, 'acc_id': acc_id}">
                                     <tree>
                                         <field name="co_obj"/>
                                         <field name="debit"/>
@@ -60,13 +56,16 @@
                                     </tree>
                                     <form>
                                         <field name="co_obj"/>
+                                        <newline/>
                                         <field name="debit"/>
                                         <field name="credit"/>
+                                        <newline/>
                                         <field name="quantity"/>
                                         <field name="price"/>
                                         <field name="due"/>
                                     </form>
-                                </field>
+                                  </field>
+                                </group>
                             </form>
                         </field>
                         <group col="6">
@@ -85,6 +84,18 @@
                         <field name="state" widget="statusbar"/>
                     </header>
                 </form>
+            </field>
+        </record>
+        <record id='form_fi_doc_editable' model="ir.ui.view">
+        	<field name="name">form.fi.doc.editable</field>
+            <field name="model">fi.doc</field>
+            <field name="inherit_id" ref="bzr_fi_gl.form_fi_doc"/>
+            <!-- 总账会计可以直接在凭证上输入行项目，不弹出窗口 -->
+            <field name="groups_id" eval="[(6, 0, [ref('bzr_fi_gl.group_gl')])]"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='line_ids']/tree" position="attributes">
+                    <attribute name="editable">bottom</attribute>
+                </xpath>
             </field>
         </record>
         <record id="tree_fi_doc" model="ir.ui.view">
