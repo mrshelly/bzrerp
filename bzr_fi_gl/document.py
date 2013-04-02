@@ -166,6 +166,15 @@ class fi_doc(osv.osv):
         })
         return super(fi_doc, self).copy(cr, uid, id, default, context)
 
+    def write(self, cr, uid, ids, vals, context=None):
+        ret = super(fi_doc, self).write(cr, uid, ids, vals, context=context)
+        if 'period_id' in vals or 'line_ids' in vals:
+            res = self.browse(cr, uid, isinstance(ids, (int,long)) and [ids] or ids, context=context)
+            for r in res:
+                self.pool.get('fi.doc.line').write(cr, uid, [cc.id for cc in r.line_ids], {}, context=context)
+                self.pool.get('fi.doc.line.cost').write(cr, uid, [lc.id for l in [ccc.cost_ids for ccc in r.line_ids] for lc in l], {}, context=context)
+        return ret
+
 class fi_doc_line(osv.osv):
     _name = 'fi.doc.line'
     _description = u'会计凭证行'
@@ -197,6 +206,13 @@ class fi_doc_line(osv.osv):
         'period_id': lambda self,cr,uid,c: c.get('period_id', False)
     }
 
+    def write(self, cr, uid, ids, vals, context=None):
+        ret = super(fi_doc_line, self).write(cr, uid, ids, vals, context=context)
+        if 'acc_id' in vals or 'cost_ids' in vals:
+            res = self.browse(cr, uid, isinstance(ids, (int,long)) and [ids] or ids, context=context)
+            for r in res:
+                self.pool.get('fi.doc.line.cost').write(cr, uid, [lc.id for lc in r.cost_ids], {}, context=context)
+        return ret
 
 class fi_doc_line_cost(osv.osv):
     def _get_co(self,cr,uid,context=None):
