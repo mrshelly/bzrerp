@@ -12,7 +12,9 @@
     'depends': [
         'bzr_base','decimal_precision',
     ],
-    'data': ['document.xml',
+    'data': ['security/groups.xml',
+             'security/ir.model.access.csv',
+             'document.xml',
              'master.xml',
              'config.xml',
              'data.xml',
