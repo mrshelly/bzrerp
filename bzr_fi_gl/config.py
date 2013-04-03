@@ -22,7 +22,7 @@ class fi_acc_type(osv.osv):
 class fi_report(osv.osv):
     _name='fi.report'
     _description=u'报表行'
-    _order='sequence'
+    _order='type, line'
     def __compute(self, cr, uid, ids, field_name, arg, context=None):
         result={}
         period=self.pool.get('fi.period').find(cr,uid,
