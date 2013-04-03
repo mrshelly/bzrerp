@@ -1,2 +1,11 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-
+read_fi_doc_type,read_fi_doc_type,model_fi_doc_type,,1,0,0,0
+read_fi_acc_type,read_fi_acc_type,model_fi_acc_type,,1,0,0,0
+read_fi_report,read_fi_report,model_fi_report,,1,0,0,0
+read_fi_acc,read_fi_acc,model_fi_acc,,1,0,0,0
+read_fi_year,read_fi_year,model_fi_year,,1,0,0,0
+read_fi_period,read_fi_period,model_fi_period,,1,0,0,0
+read_fi_doc,read_fi_doc,model_fi_doc,,1,0,0,0
+read_fi_doc_line,read_fi_doc_line,model_fi_doc_line,,1,0,0,0
+read_fi_doc_line_cost,read_fi_doc_line_cost,model_fi_doc_line_cost,,1,0,0,0
+read_fi_acc_balance,read_fi_acc_balance,model_fi_acc_balance,,1,0,0,0

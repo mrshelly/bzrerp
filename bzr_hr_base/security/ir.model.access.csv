@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+read_bzr_hr_employee_type,read_bzr_hr_employee_type,model_bzr_hr_employee_type,,1,0,0,0
+read_bzr_hr_department_type,read_bzr_hr_department_type,model_bzr_hr_department_type,,1,0,0,0
+read_bzr_hr_department,read_bzr_hr_department,model_bzr_hr_department,,1,0,0,0
+read_bzr_hr_employee,read_bzr_hr_employee,model_bzr_hr_employee,,1,0,0,0

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from openerp.osv import fields, osv
+from openerp.addons.bzr_base import check_cycle
 
 class bzr_hr_department(osv.osv):
     """
@@ -16,6 +17,9 @@ class bzr_hr_department(osv.osv):
         'manager_id': fields.many2one('bzr.hr.employee', u'部门主管'),
         'member_ids': fields.many2many('bzr.hr.employee', 'rel_employee_2_department', 'department_id', 'employee_id', u'员工'),
     }
+    _constraints = [
+        (check_cycle,u'不能创建循环的层级关系',['parent_id']),
+                   ]
 
 class bzr_hr_employee(osv.osv):
     """

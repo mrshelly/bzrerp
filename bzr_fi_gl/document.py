@@ -100,7 +100,6 @@ class fi_doc(osv.osv):
     }
     _defaults = {
         'type_id':1,
-        'number': '/',
         'state': 'draft',
         'ref_count':1,
         'period_id': lambda self, cr, uid, c: \
@@ -110,21 +109,23 @@ class fi_doc(osv.osv):
         'company_id': lambda self, cr, uid, c: \
             self.pool.get('res.users').browse(cr, uid, uid, c).company_id.id,
     }
-    def check_balance(self,cr,uid,id,context=None):
-        res = False
-        debit = credit = 0.0
-        lines = self.browse(cr, uid, id, context).line_ids
-        if lines:
-            for l in lines:
-                debit += l.debit
-                credit += l.credit
-            if float_compare(debit,credit,precision_digits=2):
-                res = True
-        return res
+    
+    def check_balance(self,cr,uid,ids,context=None):
+        for d in self.browse(cr, uid, ids, context):
+            if d.line_ids:
+                debit = credit = 0.0
+                for l in d.line_ids:
+                    debit += l.debit
+                    credit += l.credit
+                if not float_compare(debit,credit,precision_digits=2):
+                    return False
+            else:
+                return False
+           
     def new_number(self,cr,uid,id,context=None):
         '''按期间和凭证字编号'''
         me = self.browse(cr, uid, id, context)
-        arg = [('period_id','=',me.period_id),('type_id','=',me.type_id),('state','!=','draft')]
+        arg = [('period_id','=',me.period_id.id),('type_id','=',me.type_id.id)]
         res = self.search_count(cr, uid, arg, context) + 1
         self.write(cr, uid, [id], {'number':res}, context)
         return res
@@ -154,12 +155,17 @@ class fi_doc(osv.osv):
             context = {}
         self.write(cr,uid,ids,{'state':'draft','approve_uid':None,'post_uid':None})
         return True
+    
+    def create(self,cr,uid,vals,context=None):
+        new_id = super(fi_doc,self).create(cr,uid,vals,context=context)
+        self.new_number(cr, uid, new_id, context)
+        return new_id
+    
     def copy(self, cr, uid, id, default=None, context=None):
         default = {} if default is None else default.copy()
         context = {} if context is None else context.copy()
         default.update({
             'state':'draft',
-            'name':'/',
         })
         context.update({
             'copy':True
@@ -174,7 +180,20 @@ class fi_doc(osv.osv):
                 self.pool.get('fi.doc.line').write(cr, uid, [cc.id for cc in r.line_ids], {}, context=context)
                 self.pool.get('fi.doc.line.cost').write(cr, uid, [lc.id for l in [ccc.cost_ids for ccc in r.line_ids] for lc in l], {}, context=context)
         return ret
-
+    def unlink(self, cr, uid, ids, context=None):
+        if context is None:
+            context = {}
+        to_remove = []
+        for doc in self.browse(cr, uid, ids, context=context):
+            if doc['state'] != 'draft':
+                raise osv.except_osv(_(u'错误'),
+                        _('只能删除未审核的凭证'))
+            to_remove.append(doc.id)
+        result = super(fi_doc, self).unlink(cr, uid, to_remove, context)
+        return result
+    _constraints = [
+        (check_balance,u'不能保存未平衡的凭证',['line_ids']),
+                   ]
 class fi_doc_line(osv.osv):
     _name = 'fi.doc.line'
     _description = u'会计凭证行'
@@ -216,16 +235,21 @@ class fi_doc_line(osv.osv):
 
 class fi_doc_line_cost(osv.osv):
     def _get_co(self,cr,uid,context=None):
-        return [('res.partner','往来')]
+        obj_type = self.pool.get('fi.cost.type')
+        type_ids = obj_type.search(cr,uid,[],context=context)
+        res = obj_type.browse(cr,uid,type_ids,context=context)
+        ret = [(r.model,r.name) for r in res ]
+        return ret
+    #[('res.partner','往来')]
     _name = 'fi.doc.line.cost'
     _description = u'辅助核算行'
     _columns = {
 #凭证行编号
-        'line_id':fields.many2one('fi.doc.line',u'凭证行'),
+        'line_id':fields.many2one('fi.doc.line',u'凭证行',ondelete='cascade'),
 #类别
         'type':fields.char(u'辅助核算类别',size=64),
 #辅助核算项目
-        'co_obj':fields.reference(u'辅助核算项目',selection=_get_co,size=128),
+        'co_obj':fields.reference(u'辅助核算项目',selection=_get_co,size=128,required=True),
 #借方
 #TODO 这里这个'Account'能否使用当前class的name？
         'debit': fields.float(u'借方',help=u'以公司本位币计的金额',
@@ -240,6 +264,15 @@ class fi_doc_line_cost(osv.osv):
 #单价
         'price':fields.float(u'单价',
         digits_compute=dp.get_precision('Account')),
+#外币相关
+#币种
+#FIXME 尚未定义，这里是个many2one
+#金额
+        'amt':fields.float(u'原币金额',
+        digits_compute=dp.get_precision('Account')),
+#汇率
+        'rate':fields.float(u'汇率',
+        digits_compute=dp.get_precision('Account')),
 #业务伙伴相关
 #到期日
         'due':fields.date(u'到期日',help=u'往来欠款到期日，用于计算账龄'),
@@ -249,7 +282,13 @@ class fi_doc_line_cost(osv.osv):
         'acc_id':fields.related('line_id','acc_id',type='many2one',
           relation='fi.acc',string='科目',store=True)
     }
-
+    
+    def onchange_cost(self, cr, uid, ids, cost_id, context=None):
+        ret = {}
+        if cost_id:
+            c_type = cost_id.split(',')[0]
+            ret = {'value': {'type': c_type}}
+        return ret
 
     _defaults = {
         'period_id': lambda self,cr,uid,c: c.get('period_id', False),
