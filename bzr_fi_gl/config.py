@@ -4,6 +4,8 @@ from openerp.osv import fields, osv
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 import openerp.addons.decimal_precision as dp
+from openerp.addons.bzr_base import check_cycle
+
 #凭证类型 fi.doc.type
     
 class fi_doc_type(osv.osv):
@@ -22,7 +24,7 @@ class fi_acc_type(osv.osv):
 class fi_report(osv.osv):
     _name='fi.report'
     _description=u'报表行'
-    _order='sequence'
+    _order='type, line'
     def __compute(self, cr, uid, ids, field_name, arg, context=None):
         result={}
         period=self.pool.get('fi.period').find(cr,uid,
@@ -99,6 +101,9 @@ class fi_report(osv.osv):
             result['period_end']+=l['period_end']
 
         return result
+    _constraints = [
+        (check_cycle,u'不能创建循环的层级关系',['parent_id']),
+                   ]
 class fi_year(osv.osv):
     _name='fi.year'
     _description=u'会计年度'
@@ -131,3 +136,12 @@ class fi_year(osv.osv):
                 })
                 ds = ds + relativedelta(months=interval)
         return True
+    
+class fi_cost_type(osv.osv):
+    '''辅助核算类型'''
+    _name = 'fi.cost.type'
+    _columns = {
+        'name':fields.char('名称',size=64),
+        'model':fields.char('对象',size=64),
+        'format':fields.char('账簿格式',size=64)
+                }

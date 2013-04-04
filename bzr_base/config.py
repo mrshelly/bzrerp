@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from openerp.osv import fields, osv
+from operator import itemgetter
 
 #状态
 class bzr_state(osv.osv):

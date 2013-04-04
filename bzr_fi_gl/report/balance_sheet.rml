@@ -6,12 +6,17 @@
     </pageTemplate>
   </template>
   <stylesheet>
-      <blockTableStyle id="col4_table">
+    <blockTableStyle id="col4_table">
       <blockValign value="TOP"/>
       <lineStyle kind="LINEBEFORE" colorName="#008000" start="0,0" stop="4,4"/>
       <lineStyle kind="LINEABOVE" colorName="#008000" start="0,0" stop="4,4"/>
       <lineStyle kind="LINEBELOW" colorName="#008000" start="0,0" stop="4,4"/>
       <lineStyle kind="LINEAFTER" colorName="#008000" start="0,0" stop="4,4"/>
+    </blockTableStyle>
+    <blockTableStyle id="outter_table">
+      <blockBottomPadding length="0"/>
+      <blockTopPadding length="0" />
+      <blockValign value="TOP"/>
     </blockTableStyle>
   </stylesheet>
   <story>
@@ -25,7 +30,7 @@
        <td><para> [[ period_name() ]]</para></td>
       </tr>
     </blockTable>
-    <blockTable colWidths="340.0,340.0">
+    <blockTable colWidths="340.0,340.0" style="outter_table">
     <tr>
     <td>
     <blockTable colWidths="100.0,40.0,100.0,100.0" style="col4_table">
@@ -65,7 +70,7 @@
     </td>
     </tr>
     </blockTable>
-    <blockTable colWidths="340.0,340.0">
+    <blockTable colWidths="340.0,340.0" style="outter_table">
     <tr>
     <td>
     <section>

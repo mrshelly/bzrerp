@@ -50,19 +50,22 @@
                                     <newline/>
                                   <field name="cost_ids" nolabel="1" colspan='6' context="{'period_id': parent.period_id, 'acc_id': acc_id}">
                                     <tree>
-                                        <field name="co_obj"/>
+                                        <field name="co_obj" on_change='onchange_cost(co_obj)'/>
                                         <field name="debit"/>
                                         <field name="credit"/>
                                     </tree>
                                     <form>
-                                        <field name="co_obj"/>
+                                        <field name="co_obj" on_change='onchange_cost(co_obj)'/>
+                                        <field name="type" invisible='1'/>
                                         <newline/>
                                         <field name="debit"/>
                                         <field name="credit"/>
                                         <newline/>
-                                        <field name="quantity"/>
-                                        <field name="price"/>
-                                        <field name="due"/>
+                                        <field name="quantity" attrs="{'invisible':[('type','!=','bzr.goods')]}"/>
+                                        <field name="price" attrs="{'invisible':[('type','!=','bzr.goods')]}"/>
+                                        <field name="amt" attrs="{'invisible':[('type','!=','bzr.currency')]}"/>
+                                        <field name="rate" attrs="{'invisible':[('type','!=','bzr.currency')]}"/>
+                                        <field name="due" attrs="{'invisible':[('type','!=','res.partner')]}" />
                                     </form>
                                   </field>
                                 </group>

@@ -12,6 +12,8 @@
         'bzr_base',
     ],
     'data': [
+        'security/groups.xml',
+        'security/ir.model.access.csv',
         'config.xml',
         'document.xml',
         'master.xml',

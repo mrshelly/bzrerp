@@ -8,6 +8,7 @@ from openerp.tools.translate import _
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 import openerp.addons.decimal_precision as dp
+from openerp.addons.bzr_base import check_cycle
 
 class fi_acc(osv.osv):
     _name='fi.acc'
@@ -162,7 +163,9 @@ class fi_acc(osv.osv):
                                 _(u'余额计算出错'))
 
         return result
-
+    _constraints = [
+        (check_cycle,u'不能创建循环的层级关系',['parent_id']),
+                   ]
 #会计期间 fi.period
 class fi_period(osv.osv):
     _name='fi.period'

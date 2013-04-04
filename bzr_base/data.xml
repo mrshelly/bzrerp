@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<openerp>
+<data noupdate="0">
+	<!-- 别自作主张到网上去下载最新的模块，有可能无法重启服务 -->
+	<record id="bzr_apps_server" model="ir.config_parameter">
+	    <field name="key">apps.server</field>
+	    <field name="value">bzr</field>
+	</record>
+</data>
+</openerp>
