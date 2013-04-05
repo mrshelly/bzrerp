@@ -110,8 +110,9 @@
             <field name="arch" type="xml">
                 <form string="报表行">
                 	<field name="type"/>
-                    <field name="line"/>
+                	<field name="sequence"/>
                     <field name="name"/>
+                    <field name="line"/>
                     <field name="parent_id"/>
                     <field name="children_ids"/>
                 </form>
@@ -123,8 +124,9 @@
             <field name="arch" type="xml">
                 <tree string="报表行">
                 	 <field name="type"/>
-                    <field name="line"/>
+                	 <field name="sequence"/>
                     <field name="name"/>
+                    <field name="line"/>
                     <field name="parent_id"/>
                     <field name="period_end"/>
                 </tree>

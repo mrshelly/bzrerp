@@ -155,7 +155,7 @@ class report_parser(report_sxw.rml_parse):
         lines = []    
         obj_report = self.pool.get('fi.report')
 
-        line_ids = obj_report.search(self.cr, self.uid, [('type','=',block)],order='line')
+        line_ids = obj_report.search(self.cr, self.uid, [('type','=',block)])
         for line in obj_report.browse(self.cr, self.uid, line_ids):
             lines.append(line)
         return lines
