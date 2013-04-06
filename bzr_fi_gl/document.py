@@ -117,8 +117,8 @@ class fi_doc(osv.osv):
                 for l in d.line_ids:
                     debit += l.debit
                     credit += l.credit
-                if not float_compare(debit,credit,precision_digits=2):
-                    return False
+                if abs(debit - credit) < 10 ** -4:
+                    return True
             else:
                 return False
            
