@@ -11,9 +11,9 @@
             <field name="model">fi.report</field>
             <field name="field_parent">children_ids</field>
             <field name="arch" type="xml">
-                <tree string="会计报表" toolbar="1" >
-                    <field name="line"/>
+                <tree string="会计报表">
                     <field name="name"/>
+                    <field name="line"/>
                     <field name="parent_id" invisible="1"/>
                     <field name="period_start"/>
                     <field name="period_debit"/>

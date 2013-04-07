@@ -11,14 +11,15 @@
     'sequence': 3,
     'depends': [
         'bzr_fi_gl',
-#        'bzr_fi_cost',
+        'bzr_fi_cost',
 #        'bzr_fi_arap',
 #        'bzr_fi_cash',
 #        'bzr_fi_stock',
     ],
     'data': [
     ],
-    'demo': [
+    'demo': [             'demo/fi.report.csv',
+                          'demo/fi.acc.csv',
     ],
     'test': [
     ],

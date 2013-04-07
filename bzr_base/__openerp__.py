@@ -8,7 +8,7 @@
     """,
     'author': 'jeff@osbzr.com',
     'sequence': 1000,
-    'depends': ['base'],
+    'depends': ['base','oecn_base_fonts'],
     'data': ['security/groups.xml',
              'security/ir.model.access.csv',
              'config.xml',

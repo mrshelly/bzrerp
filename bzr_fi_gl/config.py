@@ -24,7 +24,7 @@ class fi_acc_type(osv.osv):
 class fi_report(osv.osv):
     _name='fi.report'
     _description=u'报表行'
-    _order='type, line'
+    _order='type, sequence'
     def __compute(self, cr, uid, ids, field_name, arg, context=None):
         result={}
         period=self.pool.get('fi.period').find(cr,uid,
@@ -36,6 +36,7 @@ class fi_report(osv.osv):
     
     _columns={
         'name':fields.char(u'文本',size=128),
+        'sequence':fields.integer(u'序号'),  # 有些报表行是没有行号的，所以要用这个来排序
         'line':fields.char(u'行号',size=4),
         'type':fields.selection([('1','资产负债表（资产）'),('2','资产负债表（负债和权益）'),('3','利润表'),('4','现金流量表')],string="所属报表"),
         'parent_id':fields.many2one('fi.report', u'上级'),
