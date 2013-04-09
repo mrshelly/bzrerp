@@ -1,37 +1,33 @@
 <?xml version="1.0"?>
 <document filename="test.pdf">
-  <template pageSize="(842.0,595.0)" title="Test" author="jeff@osbzr.com" allowSplitting="20">
+  <template pageSize="29.7cm,21cm" title="Test" author="jeff@osbzr.com" allowSplitting="20">
     <pageTemplate id="first">
-      <frame id="first" x1="28.0" y1="28.0" width="786" height="539"/>
+      <frame id="first" x1="0.0" y1="0.0" width="28cm" height="21cm"/>
     </pageTemplate>
   </template>
   <stylesheet>
-      <blockTableStyle id="col4_table">
-      <blockValign value="TOP"/>
+    <blockTableStyle id="col4_table">
       <lineStyle kind="LINEBEFORE" colorName="#008000" start="0,0" stop="4,4"/>
       <lineStyle kind="LINEABOVE" colorName="#008000" start="0,0" stop="4,4"/>
       <lineStyle kind="LINEBELOW" colorName="#008000" start="0,0" stop="4,4"/>
       <lineStyle kind="LINEAFTER" colorName="#008000" start="0,0" stop="4,4"/>
     </blockTableStyle>
+    <blockTableStyle id="outter_table">
+      <blockBottomPadding length="0"/>
+      <blockTopPadding length="0" />
+      <blockValign value="TOP"/>
+    </blockTableStyle>
   </stylesheet>
   <story>
     <para>资产负债表</para>
-    <blockTable colWidths="269.0,269.0">
-      <tr>
-        <td><para></para></td>
-        <td><para></para></td>
-      </tr>
-      <tr>
-       <td><para> [[ period_name() ]]</para></td>
-      </tr>
-    </blockTable>
-    <blockTable colWidths="340.0,340.0">
+    <para> [[ period_name() ]]</para>
+    <blockTable colWidths="14cm,14cm" style="outter_table">
     <tr>
     <td>
-    <blockTable colWidths="100.0,40.0,100.0,100.0" style="col4_table">
+    <blockTable colWidths="6cm,2cm,3cm,3cm" style="col4_table">
       <tr>
         <td>
-          <para>文本</para>
+          <para>资产</para>
         </td>
         <td>
           <para>行号</para>
@@ -46,10 +42,10 @@
     </blockTable>
     </td>
     <td>
-    <blockTable colWidths="100.0,40.0,100.0,100.0" style="col4_table">
+    <blockTable colWidths="6cm,2cm,3cm,3cm" style="col4_table">
       <tr>
         <td>
-          <para>文本</para>
+          <para>负债和所有者（或股东）权益</para>
         </td>
         <td>
           <para>行号</para>
@@ -64,17 +60,19 @@
     </blockTable>
     </td>
     </tr>
+    </blockTable>
+    <blockTable colWidths="14cm,14cm" style="outter_table">
     <tr>
     <td>
     <section>
-    <blockTable colWidths="100.0,40.0,100.0,100.0" style="col4_table">
+    <blockTable colWidths="6cm,2cm,3cm,3cm" rowHeights="0.5cm"  style="col4_table">
        <para>[[repeatIn(lines('1'),'line')]]</para>
           <tr>
         <td>
           <para>[[line.name]]</para>
         </td>
         <td>
-          <para>[[line.sequence]]</para>
+          <para>[[line.line]]</para>
         </td>
         <td>
           <para>[[line.year_start]]</para>
@@ -88,14 +86,14 @@
       </td>
     <td>
     <section>
-    <blockTable colWidths="100.0,40.0,100.0,100.0" style="col4_table">
+    <blockTable colWidths="6cm,2cm,3cm,3cm" rowHeights="0.5cm" style="col4_table">
        <para>[[repeatIn(lines('2'),'line')]]</para>
           <tr>
         <td>
           <para>[[line.name]]</para>
         </td>
         <td>
-          <para>[[line.sequence]]</para>
+          <para>[[line.line]]</para>
         </td>
         <td>
           <para>[[line.year_start]]</para>

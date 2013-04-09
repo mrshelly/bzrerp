@@ -137,7 +137,7 @@ How——如何让bzrERP持续健康发展
 
 2.合并对方代码
 
-    git merge bzrerp/master
+    git merge osbzr/master
 
 3.最新的代码推送到你的github上。
 

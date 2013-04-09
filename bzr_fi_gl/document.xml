@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <!-- 主菜单-->
+        <menuitem
+                  id="menu_fi"
+                  name="会计"
+                  sequence="1"/>
+        <menuitem
+                  id="menu_fi_document"
+                  name="业务数据"
+                  parent="menu_fi"
+                  sequence="1"/>
+
+        <!-- 会计凭证 -->
+        <record id="form_fi_doc" model="ir.ui.view">
+            <field name="name">form.fi.doc</field>
+            <field name="model">fi.doc</field>
+            <field name="arch" type="xml">
+                <form string="会计凭证" version="7.0">
+                    <sheet string="会计凭证">
+                        <div align="center">
+                            <h1>记账凭证</h1>
+                        </div>
+
+                        <group col="6">
+                            <field name="type_id" widget="selection" nolabel="1"/>
+                            <field name="number" nolabel="1"/>
+                            <field name="company_id" colspan="4"/>
+                            <newline/>
+                            <field name="date"/>
+                            <field name="period_id"/>
+                            <field name="ref_count"/>
+                        </group>
+
+                        <field name="line_ids" context="{'period_id': period_id}">
+                            <tree colors="red:debit&lt;0;red:credit&lt;0">
+                                <field name="text"/>
+                                <field name="acc_id"/>
+                                <field name="debit" sum="合计"/>
+                                <field name="credit" sum="合计"/>
+                            </tree>
+                            <form>
+                                <group col="6">
+                                    <field name="text" colspan='6'/>
+                                    <newline/>
+                                    <field name="acc_id"/>
+                                    <field name="debit"/>
+                                    <field name="credit"/>
+                                    <newline/>
+                                  <field name="cost_ids" nolabel="1" colspan='6' context="{'period_id': parent.period_id, 'acc_id': acc_id}">
+                                    <tree>
+                                        <field name="co_obj" on_change='onchange_cost(co_obj)'/>
+                                        <field name="debit"/>
+                                        <field name="credit"/>
+                                    </tree>
+                                    <form>
+                                        <field name="co_obj" on_change='onchange_cost(co_obj)'/>
+                                        <field name="type" invisible='1'/>
+                                        <newline/>
+                                        <field name="debit"/>
+                                        <field name="credit"/>
+                                        <newline/>
+                                        <field name="quantity" attrs="{'invisible':[('type','!=','bzr.goods')]}"/>
+                                        <field name="price" attrs="{'invisible':[('type','!=','bzr.goods')]}"/>
+                                        <field name="amt" attrs="{'invisible':[('type','!=','bzr.currency')]}"/>
+                                        <field name="rate" attrs="{'invisible':[('type','!=','bzr.currency')]}"/>
+                                        <field name="due" attrs="{'invisible':[('type','!=','res.partner')]}" />
+                                    </form>
+                                  </field>
+                                </group>
+                            </form>
+                        </field>
+                        <group col="6">
+                            <field name="note" colspan="6"/>
+                            <newline/>
+                            <field name="create_uid"/>
+                            <field name="approve_uid"/>
+                            <field name="post_uid"/>
+                        </group>
+                        <field name="needfix" placeholder="如复核时发现有问题，请写在这里。以便制单人据此修正..."/>
+                    </sheet>
+                    <header>
+                        <button string="复核" type="object" name="button_approve" class="oe_highlight" states="draft"/>
+                        <button string="记账" type="object" name="button_post" class="oe_highlight" states="approved"/>
+                        <button string="重制" type="object" name="button_redo" states="approved,posted"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                </form>
+            </field>
+        </record>
+        <record id='form_fi_doc_editable' model="ir.ui.view">
+        	<field name="name">form.fi.doc.editable</field>
+            <field name="model">fi.doc</field>
+            <field name="inherit_id" ref="bzr_fi_gl.form_fi_doc"/>
+            <!-- 总账会计可以直接在凭证上输入行项目，不弹出窗口 -->
+            <field name="groups_id" eval="[(6, 0, [ref('bzr_fi_gl.group_gl')])]"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='line_ids']/tree" position="attributes">
+                    <attribute name="editable">bottom</attribute>
+                </xpath>
+            </field>
+        </record>
+        <record id="tree_fi_doc" model="ir.ui.view">
+            <field name="name">tree.fi.doc</field>
+            <field name="model">fi.doc</field>
+            <field name="arch" type="xml">
+                <tree string="会计凭证" colors="blue:needfix">
+                    <field name="date"/>
+                    <field name="type_id"/>
+                    <field name="number"/>
+                    <field name="state"/>
+                    <field name="amount"/>
+                    <field name="needfix"/>
+                </tree>
+            </field>
+        </record>
+        <record id="search_fi_doc" model="ir.ui.view">
+            <field name="name">search.fi.doc</field>
+            <field name="model">fi.doc</field>
+            <field name="arch" type="xml">
+                <search string="Search Move">
+                    <field name="number"/>
+                </search>
+            </field>
+        </record>
+        <record id="action_fi_doc" model="ir.actions.act_window">
+            <field name="name">会计凭证</field>
+            <field name="res_model">fi.doc</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form,tree</field>
+            <field name="search_view_id" ref="search_fi_doc"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                点击新建会计凭证
+              </p><p>
+                会计凭证是会计模块的核心凭证
+              </p>
+            </field>
+        </record>
+
+        <menuitem
+                      action="action_fi_doc"
+                      id="menu_fi_doc"
+                      parent="menu_fi_document"
+                      sequence="1"/>
+
+    </data>
+</openerp>
