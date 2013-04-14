@@ -1,0 +1,13 @@
+.openerp .oe_topbar {
+    position: fixed;
+    z-index: 9999;
+}
+
+.openerp .oe_leftbar {
+    padding-top: 32px;
+}
+
+
+.openerp .oe_application {
+    padding-top: 32px;
+}
