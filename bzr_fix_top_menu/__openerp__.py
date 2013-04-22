@@ -14,7 +14,7 @@
     'data': [],
     'demo': [],
     'test': [],
-    'css': ['static\src\css\fix_top_menu.css'],
+    'css': ['static/src/css/fix_top_menu.css'],
     'installable': True,
     'application': False,
     'auto_install': False,
