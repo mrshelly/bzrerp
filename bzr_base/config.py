@@ -2,6 +2,26 @@
 
 from openerp.osv import fields, osv
 from operator import itemgetter
+from openerp.tools import ormcache
+
+# LRU CACHE
+class bzrcache(ormcache):
+    def lookup(self, self2, cr, *args):
+        d = self.lru(self2)
+        key = args[self.skiparg-2:]
+        key = str(key) # to load context
+        try:
+           r = d[key]
+           self.stat_hit += 1
+           return r
+        except KeyError:
+           self.stat_miss += 1
+           value = d[key] = self.method(self2, cr, *args)
+           return value
+        except TypeError:
+           self.stat_err += 1
+           return self.method(self2, cr, *args)
+
 
 #状态
 class bzr_state(osv.osv):
