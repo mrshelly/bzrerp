@@ -10,7 +10,7 @@
     'author': 'jeff@osbzr.com',
     'sequence': 2,
     'depends': [
-        'bzr_base','decimal_precision',
+        'bzr_base','decimal_precision','web',
     ],
     'data': ['security/groups.xml',
              'security/ir.model.access.csv',
@@ -25,6 +25,7 @@
     ],
     'test': [
     ],
+    'js': ['static/js/*.js'],
     'css': [
     ],
     'installable': True,
