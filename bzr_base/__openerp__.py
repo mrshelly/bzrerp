@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
-'''
-开阖ERP采用AGPL-3协议，版权(CopyRight)归以下代码提交者所有
+###################################################################################
+#
+#  开阖ERP采用AGPL-3协议，版权(CopyRight)归以下代码提交者所有
+#
+# 2013    开阖软件 Jeff Wang,OpenERPJeff      (jeff@osbzr.com)            初始版本
+# 2013    joshuajan                           (popkar77@gmail.com)
+# 2013    mrshelly                            (mrshelly@hotmail.com)
+#
+###################################################################################
 
-2013    开阖软件 Jeff Wang,OpenERPJeff      (jeff@osbzr.com)            初始版本
-2013    joshuajan                           (popkar77@gmail.com)
-2013    mrshelly                            (mrshelly@hotmail.com)
-
-'''
 
 {
     'name': '开阖ERP基础模块',
@@ -17,7 +19,7 @@
     """,
     'author': 'jeff@osbzr.com',
     'sequence': 1000,
-    'depends': ['base','oecn_base_fonts'],
+    'depends': ['base'],
     'data': ['security/groups.xml',
              'security/ir.model.access.csv',
              'config.xml',
