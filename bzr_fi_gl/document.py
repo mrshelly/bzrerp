@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
+'''
+开阖ERP采用AGPL-3协议，版权(CopyRight)归以下代码提交者所有
 
+2013    开阖软件 Jeff Wang,OpenERPJeff      (jeff@osbzr.com)            初始版本
+2013    mrshelly                            (mrshelly@hotmail.com)      级联修改 期间与科目
+2013    joshuajan                           (popkar77@gmail.com)
+
+'''
 from openerp.osv import fields, osv
 from openerp.tools import float_compare
 from openerp.addons.bzr_base import get_states
@@ -203,7 +210,7 @@ class fi_doc_line(osv.osv):
 #摘要
         'text':fields.char(u'摘要',size=64,help=u'凭证行的摘要',required=True),
 #会计科目
-        'acc_id':fields.many2one('fi.acc',u'会计科目',help=u'只能选择末级科目',required=True,domain=[('child_ids','=',False)]),
+        'acc_id':fields.many2one('fi.acc',u'会计科目',select = '1',help=u'只能选择末级科目',required=True,domain=[('child_ids','=',False)]),
 #借方
 #TODO 这里这个'Account'能否使用当前class的name？
         'debit': fields.float(u'借方',help=u'以公司本位币计的金额',
@@ -217,7 +224,7 @@ class fi_doc_line(osv.osv):
 
 # 从凭证上复制一些字段过来
 #TODO 复制凭证时这个字段的值会带入新凭证，即使新凭证的期间值改了也不更新这里，注意
-        'period_id':fields.related('doc_id','period_id',type='many2one',
+        'period_id':fields.related('doc_id','period_id',select = '1',type='many2one',
           relation='fi.period', string='期间', store=True, readonly=True),
     }
 

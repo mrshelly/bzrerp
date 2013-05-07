@@ -1,7 +1,35 @@
 # -*- coding: utf-8 -*-
+'''
+开阖ERP采用AGPL-3协议，版权(CopyRight)归以下代码提交者所有
 
+2013    开阖软件 Jeff Wang,OpenERPJeff      (jeff@osbzr.com)            初始版本
+2013    buke                                (wangbuke@gmail.com)        add lru cache for get_amount in menu open
+2013    mrshelly                            (mrshelly@hotmail.com)
+
+
+'''
 from openerp.osv import fields, osv
 from operator import itemgetter
+from openerp.tools import ormcache
+
+# LRU CACHE
+class bzrcache(ormcache):
+    def lookup(self, self2, cr, *args):
+        d = self.lru(self2)
+        key = args[self.skiparg-2:]
+        key = str(key) # to load context
+        try:
+           r = d[key]
+           self.stat_hit += 1
+           return r
+        except KeyError:
+           self.stat_miss += 1
+           value = d[key] = self.method(self2, cr, *args)
+           return value
+        except TypeError:
+           self.stat_err += 1
+           return self.method(self2, cr, *args)
+
 
 #状态
 class bzr_state(osv.osv):
