@@ -16,7 +16,7 @@
                         <field name="company_id"/>
                         <newline/>
                         <field name="manager_id" colspan="4"/>
-                        <field name="member_ids" colspan="4" widget="many2many_tags" placeholder="输入员工姓名..."/>
+                        <field name="member_ids" colspan="4" placeholder="输入员工姓名..."/>
                     </form>
                 </field>
             </record>
@@ -65,6 +65,7 @@
                     <form string="员工">
                         <field name="active"/>
                         <field name="code"/>
+                        <field name="photo" widget="image"/>
                         <field name="name"/>
                         <field name="gender"/>
                         <field name="user_id"/>
@@ -77,9 +78,14 @@
                         <field name="mobile_phone"/>
                         <field name="work_email"/>
                         <field name="login"/>
-                        <field name="photo" widget="image"/>
                         <newline/>
                         <field name="manager_id" colspan="4"/>
+                        <field name="manager_ids" colspan="4">
+                            <tree string="上司们">
+                                <field name="name"/>
+                                <field name="department_id"/>
+                            </tree>
+                        </field>
 
                         <field name="type_ids" colspan="4" widget="many2many_tags" placeholder="类型..."/>
                         <field name="notes" colspan="4"/>

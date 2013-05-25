@@ -19,13 +19,29 @@ class bzr_hr_department(osv.osv):
     """
     _name='bzr.hr.department'
     _description=u'部门'
+
+    def _get_members(self, cr, uid, ids, field_name, arg, context=None):
+        if context is None:
+            context = {}
+        if isinstance(ids, (int, long)):
+            ids = [ids]
+
+        res = {}
+        emp_obj = self.pool.get('bzr.hr.employee')
+        emp_ids = emp_obj.search(cr, uid, [('department_id', 'in', ids)], context=context)
+        for r in emp_obj.browse(cr, uid, emp_ids, context=context):
+            if not (r.department_id.id in res):
+                res[r.department_id.id] = []
+            res[r.department_id.id].append([4,r.id])
+        return res
+
     _columns = {
         'name': fields.char(u'名称', size=64, required=True),
         'company_id': fields.many2one('res.company', u'直属公司', required=False),
         'parent_id': fields.many2one('bzr.hr.department', u'上级部门'),
         'child_ids': fields.one2many('bzr.hr.department', 'parent_id', u'下属部门'),
         'manager_id': fields.many2one('bzr.hr.employee', u'部门主管'),
-        'member_ids': fields.many2many('bzr.hr.employee', 'rel_employee_2_department', 'department_id', 'employee_id', u'员工'),
+        'member_ids': fields.function(_get_members, type='one2many', relation='bzr.hr.employee', string=u'员工', readonly=True, method=True),
     }
     _constraints = [
         (check_cycle,u'不能创建循环的层级关系',['parent_id']),
@@ -37,6 +53,20 @@ class bzr_hr_employee(osv.osv):
     """
     _name='bzr.hr.employee'
     _description=u'员工'
+
+    def _get_managers(self, cr, uid, ids, field_name, arg, context=None):
+        res = {}
+        for r in self.browse(cr, uid, ids, context=context):
+            res[r.id] = []
+            dept = r.department_id
+            while dept.manager_id:
+                if not (dept.manager_id.id == r.id):
+                    res[r.id].append([4,dept.manager_id.id])
+                dept = dept.parent_id
+                if not dept:
+                    break
+        return res
+
     _columns={
         'name':fields.char(u'姓名',size=50,required=True),
         'code': fields.char(u'编号', size=16),
@@ -53,6 +83,7 @@ class bzr_hr_employee(osv.osv):
         'work_email': fields.char(u'公司邮箱', size=240),
         'notes': fields.text('备注'),
         'manager_id': fields.related('department_id', 'manager_id', type='many2one', relation='bzr.hr.employee', string='直接上司', readonly=1),
+        'manager_ids': fields.function(_get_managers, type='one2many', relation='bzr.hr.employee', string='上司们', method=True, readonly=1),
         'type_ids': fields.many2many('bzr.hr.employee.type', 'rel_employee_2_employee_type', 'employee_id', 'type_id', u'员工类型'),
         'child_ids': fields.one2many('bzr.hr.employee', 'manager_id', '直接下属'),
         'photo': fields.binary(u'证件照片'),
