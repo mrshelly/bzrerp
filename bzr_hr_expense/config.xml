@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <!-- 菜单项 -->
+            <menuitem id="menu_bzr_hr_expense_config" name="费用" parent="bzr_hr_base.menu_bzr_hr_config" sequence="300"/>
+
+        <!-- 费用类型 -->
+            <record id="bzr_hr_expense_type_form" model="ir.ui.view">
+                <field name="name">bzr.hr.expense.type.form</field>
+                <field name="model">bzr.hr.expense.type</field>
+                <field name="arch" type="xml">
+                    <form string="费用类型">
+                        <field name="name"/>
+                    </form>
+                </field>
+            </record>
+            <record id="bzr_hr_expense_type_tree" model="ir.ui.view">
+                <field name="name">bzr.hr.expense.type.tree</field>
+                <field name="model">bzr.hr.expense.type</field>
+                <field name="arch" type="xml">
+                    <tree string="费用类型">
+                        <field name="name"/>
+                    </tree>
+                </field>
+            </record>
+            <record id="bzr_hr_expense_type_search" model="ir.ui.view">
+                <field name="name">bzr.hr.expense.type.search</field>
+                <field name="model">bzr.hr.expense.type</field>
+                <field name="arch" type="xml">
+                    <search string="费用类型">
+                        <field name="name"/>
+                    </search>
+                </field>
+            </record>
+            <!-- ============================= -->
+            <record id="action_bzr_hr_expense_type_tree" model="ir.actions.act_window">
+                <field name="name">费用类型</field>
+                <field name="res_model">bzr.hr.expense.type</field>
+                <field name="view_type">form</field>
+                <field name="view_mode">tree,form</field>
+                <field name="view_id" ref="bzr_hr_expense_type_tree"/>
+                <field name="search_view_id" ref="bzr_hr_expense_type_search"/>
+            </record>
+            <menuitem id="menu_action_bzr_hr_expense_type_tree" action="action_bzr_hr_expense_type_tree" parent="menu_bzr_hr_expense_config"/>
+
+    </data>
+</openerp>
