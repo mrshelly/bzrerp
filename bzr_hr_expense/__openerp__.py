@@ -10,7 +10,7 @@
 
 
 {
-    'name': '人力资源 - 费用',
+    'name': '人力资源 - 报销',
     'version': '1.0',
     'category': 'Human Resources',
     'description': """

@@ -2,5 +2,70 @@
 <openerp>
     <data>
 
+        <!-- 报销单 -->
+            <record id="bzr_hr_expense_form" model="ir.ui.view">
+                <field name="name">bzr.hr.expense.form</field>
+                <field name="model">bzr.hr.expense</field>
+                <field name="arch" type="xml">
+                    <form string="报销单" version="7.0">
+                        <header>
+                            <field name="state" widget="statusbar" nolabel="1" />
+                        </header>
+                        <sheet>
+                            <group colspan="4" col="4">
+                                <field name="name" colspan="4"/>
+                                <field name="company_id"/>
+                                <field name="department_id"/>
+                                <field name="employee_id"/>
+                                <field name="date"/>
+                            </group>
+                            <group colspan="4" col="4">
+                                <field name="line_ids" colspan="4" nolabel="1">
+                                    <tree string="报销明细" editable="bottom">
+                                        <field name="name" />
+                                        <field name="amount" />
+                                    </tree>
+                                </field>
+                            </group>
+                        </sheet>
+                    </form>
+                </field>
+            </record>
+            <record id="bzr_hr_expense_tree" model="ir.ui.view">
+                <field name="name">bzr.hr.expense.tree</field>
+                <field name="model">bzr.hr.expense</field>
+                <field name="arch" type="xml">
+                    <tree string="报销单">
+                        <field name="name"/>
+                        <field name="company_id"/>
+                        <field name="department_id"/>
+                        <field name="employee_id"/>
+                    </tree>
+                </field>
+            </record>
+            <record id="bzr_hr_expense_search" model="ir.ui.view">
+                <field name="name">bzr.hr.expense.search</field>
+                <field name="model">bzr.hr.expense</field>
+                <field name="arch" type="xml">
+                    <search string="报销单">
+                        <field name="name"/>
+                        <field name="company_id"/>
+                        <field name="department_id"/>
+                        <field name="employee_id"/>
+                    </search>
+                </field>
+            </record>
+            <!-- ============================= -->
+            <record id="action_bzr_hr_expense" model="ir.actions.act_window">
+                <field name="name">报销单</field>
+                <field name="res_model">bzr.hr.expense</field>
+                <field name="view_type">form</field>
+                <field name="view_mode">tree,form</field>
+                <field name="view_id" ref="bzr_hr_expense_tree"/>
+                <field name="search_view_id" ref="bzr_hr_expense_search"/>
+            </record>
+            <menuitem id="menu_bzr_hr_expense" action="action_bzr_hr_expense" parent="menu_bzr_hr_expense_document"/>
+
+
     </data>
 </openerp>

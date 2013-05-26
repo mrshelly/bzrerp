@@ -4,6 +4,8 @@
         <!-- 菜单项 -->
             <menuitem id="menu_bzr_hr_expense_config" name="费用" parent="bzr_hr_base.menu_bzr_hr_config" sequence="300"/>
 
+            <menuitem id="menu_bzr_hr_expense_document" name="费用" parent="base.menu_bzr_hr" sequence="200"/>
+
         <!-- 费用类型 -->
             <record id="bzr_hr_expense_type_form" model="ir.ui.view">
                 <field name="name">bzr.hr.expense.type.form</field>
